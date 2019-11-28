@@ -1,0 +1,7 @@
+.flutter-plugins
+.idea/
+.packages/
+build/
+flutter_01.log
+test/
+.packages
