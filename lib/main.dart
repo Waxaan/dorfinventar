@@ -1,15 +1,21 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/material.dart';
 import 'package:sensors/sensors.dart';
-import 'src/start.dart';
-import 'src/login.dart';
-import 'src/register.dart';
-import 'src/home.dart';
-import 'src/categories.dart';
-import 'src/myOffers.dart';
-import 'src/newOffer.dart';
-import 'src/messages.dart';
-import 'src/settings.dart';
+import 'package:flutter/material.dart';
+import 'src/_startPage.dart';
+import 'src/_loginPage.dart';
+import 'src/_registerPage.dart';
+import 'src/_homePage.dart';
+import 'src/_categoryPage.dart';
+import 'src/_subCategoryPage.dart';
+import 'src/_newOfferPage.dart';
+import 'src/_messagesPage.dart';
+import 'src/_settingsPage.dart';
+import 'src/_subSettingPage.dart';
+import 'src/_offerPage.dart';
+import 'src/_privateMessagesPage.dart';
+import 'src/_myOffersPage.dart';
+import 'src/_profilePage.dart';
+import 'src/_alienProfilePage.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,10 +35,16 @@ class MyApp extends StatelessWidget {
         "/register": (context) => RegisterPage(title: "Dorfinventar"),
         "/home": (context) => HomePage(title: "Dorfinventar",),
         "/categories": (context) => CategoryPage(title: "Kategorien"),
+        "/categories": (context) => SubCategoryPage(title: "Unterkategorie"),
         "/myOffers": (context) => MyOffersPage(title: "Meine Inserate",),
         "/newOffer": (context) => NewOfferPage(title: "Neues Inserat",),
+        "/offerPage": (context) => OfferPage(title: "Inserat: ____",),
         "/messages": (context) => MessagesPage(title: "Nachrichten",),
+        "/privateMessages": (context) => PrivateMessagesPage(title: "Ausleihen von _____",),
         "/settings": (context) => SettingsPage(title: "Einstellungen",),
+        "/settings": (context) => SubSettingsPage(title: "Untereinstellungen",),
+        "/profile": (context) => ProfilePage(title: "Profil",),
+        "/alienProfile": (context) => AlienProfilePage(title: "Profil von ___",),
       },
     );
   }
