@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
         "/myOffers": (context) => MyOffersPage(title: "Meine Inserate",),
         "/newOffer": (context) => NewOfferPage(title: "Neues Inserat",),
         "/messages": (context) => MessagesPage(title: "Nachrichten",),
-        "/settings": (context) => SettingsPage(title: "Settings",),
+        "/settings": (context) => SettingsPage(title: "Einstellungen",),
       },
     );
   }
