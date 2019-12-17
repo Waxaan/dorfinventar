@@ -3,8 +3,11 @@ import 'customDrawer.dart';
 import 'publicOfferCard.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+
+  HomePage({Key key, this.title, this.loggedIn}) : super(key: key);
   final String title;
+  bool loggedIn;
+
 
   @override
   _HomePage createState() => _HomePage();
@@ -18,8 +21,8 @@ class _HomePage extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: CustomDrawer(),
-      body: _homeWidget(),
+      drawer: CustomDrawer(loggedIn: widget.loggedIn,),
+      body: _homeWidget()
     );
   }
 

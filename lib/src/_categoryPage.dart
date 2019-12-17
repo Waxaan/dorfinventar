@@ -7,8 +7,7 @@ class CategoryPage extends StatefulWidget {
   final String title;
 
   @override
-  _CategoryPage createState() => _CategoryPage();
-}
+  _CategoryPage createState() => _CategoryPage();}
 
 class _CategoryPage extends State<CategoryPage> {
 

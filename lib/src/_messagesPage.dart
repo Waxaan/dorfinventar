@@ -3,8 +3,10 @@ import 'customDrawer.dart';
 import 'messageCard.dart';
 
 class MessagesPage extends StatefulWidget {
-  MessagesPage({Key key, this.title}) : super(key: key);
+  final bool loggedIn;
   final String title;
+
+  MessagesPage({Key key, this.title, this.loggedIn}) : super(key: key);
 
   @override
   _MessagesPage createState() => _MessagesPage();

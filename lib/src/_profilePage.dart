@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'customDrawer.dart';
+import 'profileCard.dart';
 
 class ProfilePage extends StatefulWidget {
-  ProfilePage({Key key, this.title}) : super(key: key);
+  ProfilePage({Key key, this.title, this.loggedIn}) : super(key: key);
   final String title;
+  bool loggedIn;
 
   @override
   _ProfilePage createState() => _ProfilePage();
@@ -24,6 +26,7 @@ class _ProfilePage extends State<ProfilePage> {
 
 
   Widget _settingsWidget() {
+    return ProfileCard();
     return Column(
       children: <Widget>[
         RaisedButton(
@@ -38,3 +41,4 @@ class _ProfilePage extends State<ProfilePage> {
     );
   }
 }
+
