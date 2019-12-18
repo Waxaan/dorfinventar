@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loader_search_bar/loader_search_bar.dart';
 import 'customDrawer.dart';
 import 'publicOfferCard.dart';
 
@@ -18,8 +19,10 @@ class _HomePage extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      appBar: SearchBar(
+        defaultBar: AppBar(
+          title: Text(widget.title),
+        )
       ),
       drawer: CustomDrawer(),
       body: _homeWidget()
@@ -44,7 +47,7 @@ class _HomePage extends State<HomePage> {
     items.add(
         ListTile(
           leading: Icon(Icons.loyalty),
-          title: Text("Neue Angebote"),
+          title: Text("Neuste Angebote"),
         ));
     items.addAll(getNewOffers());
     items.add(Divider());

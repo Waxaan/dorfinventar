@@ -26,6 +26,7 @@ dependencies:
   sensors: 0.4.1+1
   camera: 0.5.6+3
   scoped_model: 1.0.1
+  loader_search_bar: 1.0.3+3
 
 
 dev_dependencies:

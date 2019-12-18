@@ -1,3 +1,5 @@
+import 'package:loader_search_bar/loader_search_bar.dart';
+
 import '_homePage.dart';
 import 'package:flutter/material.dart';
 import 'customDrawer.dart';
@@ -14,8 +16,10 @@ class _CategoryPage extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      appBar: SearchBar(
+          defaultBar: AppBar(
+            title: Text(widget.title),
+          )
       ),
       drawer: CustomDrawer(),
       body: _categoryWidget(),

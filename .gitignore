@@ -2,6 +2,12 @@ test/
 .idea/
 .flutter-plugins
 .packages
+.dart_tool/
+.flutter-plugins-dependencies
+android/
+*.zip
+ios/
+
 
 
 
@@ -10,7 +16,6 @@ test/
 *.aar
 *.ap_
 *.aab
-android/gradle/
 
 # Files for the ART/Dalvik VM
 *.dex
