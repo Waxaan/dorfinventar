@@ -76,6 +76,12 @@ class CustomDrawer extends Drawer {
                   ),
                   Divider(),
                   ListTile(
+                    leading: Icon(Icons.category),
+                    title: Text("Kategorie"),
+                    onTap: () => Navigator.pushNamed(context, "/categories"),
+                  ),
+                  Divider(),
+                  ListTile(
                     leading: Icon(Icons.settings),
                     title: Text("Anmelden"),
                     onTap: () => Navigator.pushNamed(context, "/login"),

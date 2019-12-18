@@ -64,24 +64,24 @@ class _HomePage extends State<HomePage> {
   List<Widget> getNewOffers() {
     List<Widget> items = new List<Widget>();
     items.add(PublicOfferCard(
-      name: "Gartenschere", text: "So gut wie neu", price: 30.0,));
+      name: "Gartenschere", description: "So gut wie neu", price: 30.0,));
     items.add(PublicOfferCard(
-      name: "Baum fällen", text: "Ich untersütze sie beim Fällen eines Baumes, "
+      name: "Baum fällen", description: "Ich untersütze sie beim Fällen eines Baumes, "
         "Preis bitte per Nachricht", price: 0,));
     items.add(PublicOfferCard(
-      name: "Omas Käsekuchen", text: "Der beste im ganzen Dorf", price: 10.0,));
+      name: "Omas Käsekuchen", description: "Der beste im ganzen Dorf", price: 10.0,));
     return items;
   }
 
   List<Widget> getInterestingOffers() {
     List<Widget> items = new List<Widget>();
     items.add(PublicOfferCard(name: "Mediteraner Kochkurs",
-      text: "Bitte über Nachricht anmelden und Lebensmittel selbst mirnehmen.",
+      description: "Bitte über Nachricht anmelden und Lebensmittel selbst mirnehmen.",
       price: 1.0,));
-    items.add(PublicOfferCard(name: "Vergaserinnenbeleuchtung", text: "Weitere Produkte im Sortiment: "
+    items.add(PublicOfferCard(name: "Vergaserinnenbeleuchtung", description: "Weitere Produkte im Sortiment: "
         "Getriebesand, Kolbenrückholfedern, Keilriemenfett", price: 25.0,),);
-    items.add(PublicOfferCard(name: "Kindergeburtstag", text: "Wir richten für Ihr Kind einen unvergesslichen Geburtstag aus!", price: 10.0,),);
-    items.add(PublicOfferCard(name: "Klausurlöung Elektrotechnik", text: "Für die Informatiker, "
+    items.add(PublicOfferCard(name: "Kindergeburtstag", description: "Wir richten für Ihr Kind einen unvergesslichen Geburtstag aus!", price: 10.0,),);
+    items.add(PublicOfferCard(name: "Klausurlöung Elektrotechnik", description: "Für die Informatiker, "
         "die einfach nicht wollen", price: 100.0,),
     );
     return items;

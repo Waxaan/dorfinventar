@@ -1,7 +1,9 @@
+import 'package:Dorfinventar/src/privateOfferCard.dart';
 import 'package:Dorfinventar/src/userModel.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'customDrawer.dart';
+import 'dart:math';
 
 class MyOffersPage extends StatefulWidget {
   MyOffersPage({Key key, this.title}) : super(key: key);
@@ -13,6 +15,13 @@ class MyOffersPage extends StatefulWidget {
 
 class _MyOffersPage extends State<MyOffersPage> {
   @override
+  List<Widget> items = new List<Widget>();
+  void initState() {
+    super.initState();
+    items = getPrivateOffers();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -23,7 +32,10 @@ class _MyOffersPage extends State<MyOffersPage> {
       floatingActionButton: Builder(
         builder: (context) => FloatingActionButton(
           child: Text("+", style: TextStyle(fontSize: 32)),
-          onPressed: () => showSnackbar(context),
+          onPressed: () {
+            addNewOffer();
+            showSnackbar(context);
+          },
           ),
         ),
     );
@@ -31,22 +43,41 @@ class _MyOffersPage extends State<MyOffersPage> {
 
 
   Widget _settingsWidget() {
-    return Column(
-      children: <Widget>[
-        RaisedButton(
-          onPressed: () => Navigator.pushNamed(context, "/home"),
-          child: Text("Login"),
-        ),
-        RaisedButton(
-          onPressed: () => Navigator.pushNamed(context, "/register"),
-          child: Text("Registrieren"),
-        ),
-      ],
+    return Center(
+      child: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return items[index];
+        },
+      ),
     );
+  }
+
+  addNewOffer() {
+    setState(() {
+      items.add(getNewOffer());
+    });
   }
 
   showSnackbar(BuildContext context) {
     Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text("Sending Message")));
+        SnackBar(content: Text("Inserat wurde hinzugefügt")));
+  }
+
+  PrivateOfferCard getNewOffer() {
+    Random random = new Random();
+    List<PrivateOfferCard> items = <PrivateOfferCard>[];
+    items.add(PrivateOfferCard(
+      name: "TODO: Günstiges Produkt", description: "TODO: Sample Beschreibung", price: random.nextDouble()*10));
+    items.add(PrivateOfferCard(
+      name: "TODO: Normales Produkt", description: "TODO: Sample Beschreibung", price: 5+random.nextDouble()*50));
+    items.add(PrivateOfferCard(
+      name: "TODO: Luxus Produktname", description: "TODO: Sample Beschreibung", price: 50+random.nextDouble()*200));
+    return items[random.nextInt(3)];
+  }
+
+  List<Widget> getPrivateOffers() {
+    List<Widget> items = new List<Widget>();
+    return items;
   }
 }

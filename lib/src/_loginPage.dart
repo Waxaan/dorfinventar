@@ -55,6 +55,7 @@ class _LoginPage extends State<LoginPage> {
                     },
                   child: Text("Login"),
               ),
+              Text("Besitzen Sie noch keinen Account?"),
               RaisedButton(
                   onPressed: () => Navigator.pushNamed(context, "/register"),
                   child: Text("Registrieren"),

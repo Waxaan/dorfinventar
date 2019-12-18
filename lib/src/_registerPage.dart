@@ -44,8 +44,12 @@ class _RegisterPage extends State<RegisterPage> {
             ),),
             TextFormField( obscureText: true,
               decoration: InputDecoration(
-                labelText: "Passwort"
-            ),),
+                  labelText: "Passwort"
+              ),),
+            TextFormField( obscureText: true,
+              decoration: InputDecoration(
+                  labelText: "Passwort bestätigen"
+              ),),
             RaisedButton(
                onPressed: () => Navigator.pushNamed(context, "/login"),
                child: Text("Registrieren"),

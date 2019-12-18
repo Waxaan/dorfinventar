@@ -1,10 +1,11 @@
+import 'package:Dorfinventar/src/_offerPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PublicOfferCard extends Card {
-  PublicOfferCard({Key key, this.name, this.text, this.price, this.articleID}) : super(key: key);
+  PublicOfferCard({Key key, this.name, this.description, this.price, this.articleID}) : super(key: key);
   final String name;
-  final String text;
+  final String description;
   final double price;
   final String articleID;
 
@@ -25,7 +26,7 @@ class PublicOfferCard extends Card {
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
                   child: Text(this.name),
                 ),
-                subtitle: Text(this.text, overflow: TextOverflow.ellipsis,maxLines: 3,),
+                subtitle: Text(this.description, overflow: TextOverflow.ellipsis,maxLines: 3,),
               ),
               Divider(),
               Row(
@@ -38,7 +39,10 @@ class PublicOfferCard extends Card {
                   FlatButton(
                     textColor: Colors.green,
                     child: const Text('Anschauen'),
-                    onPressed: () { /* ... */ },
+                    onPressed: () {
+                      Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => OfferPage(title: this.name, description: this.description)),
+                    ); },
                   ),
                   FlatButton(
                     textColor: Colors.green,
