@@ -1,4 +1,6 @@
+import 'package:Dorfinventar/src/userModel.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 /*  Login Page
       Nur die Login-Seite der App
@@ -34,27 +36,33 @@ class _LoginPage extends State<LoginPage> {
     return Center(
       child: Padding(
         padding: EdgeInsets.all(24.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              decoration: InputDecoration(
-                  labelText: "Benutzername"
-              ),),
-            TextFormField( obscureText: true,
-              decoration: InputDecoration(
-                  labelText: "Passwort"
-              ),),
-            RaisedButton(
-                onPressed: () => Navigator.pushNamed(context, "/home"),
-                child: Text("Login"),
-            ),
-            RaisedButton(
-                onPressed: () => Navigator.pushNamed(context, "/register"),
-                child: Text("Registrieren"),
-            ),
-          ],
-        ),
-      ),
+        child: ScopedModelDescendant<UserModel>(
+          builder: (context, child, model) {
+          return Column(
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(
+                    labelText: "Benutzername"
+                ),),
+              TextFormField( obscureText: true,
+                decoration: InputDecoration(
+                    labelText: "Passwort"
+                ),),
+              RaisedButton(
+                  onPressed: () {
+                    model.login();
+                    Navigator.pushNamed(context, "/home");
+                    },
+                  child: Text("Login"),
+              ),
+              RaisedButton(
+                  onPressed: () => Navigator.pushNamed(context, "/register"),
+                  child: Text("Registrieren"),
+              ),
+            ],
+          ); }
+          )
+      )
     );
   }
 }

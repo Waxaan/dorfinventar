@@ -21,7 +21,7 @@ class _HomePage extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: CustomDrawer(loggedIn: widget.loggedIn,),
+      drawer: CustomDrawer(),
       body: _homeWidget()
     );
   }

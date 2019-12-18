@@ -37,8 +37,8 @@ class _StartPage extends State<StartPage> {
                     "mit ihren Nachbarn Artikel verwalten, verkaufen oder teilen."),
             Spacer(),
             RaisedButton(
-              onPressed: () => Navigator.pushNamed(context, "/login"),
-              child: Text("Weiter zum Login"),
+              onPressed: () => Navigator.pushNamed(context, "/home"),
+              child: Text("Weiter zur App"),
             )
           ],
         ),

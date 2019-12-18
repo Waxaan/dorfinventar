@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:sensors/sensors.dart';
 import 'package:flutter/material.dart';
 import 'src/_startPage.dart';
@@ -16,36 +17,40 @@ import 'src/_privateMessagesPage.dart';
 import 'src/_myOffersPage.dart';
 import 'src/_profilePage.dart';
 import 'src/_alienProfilePage.dart';
+import 'src/userModel.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
+  UserModel userModel = new UserModel();
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dorfinventar',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      routes: {
-        "/": (context) => StartPage(title: "Dorfinventar"),
-        "/login": (context) => LoginPage(title: "Dorfinventar"),
-        "/register": (context) => RegisterPage(title: "Dorfinventar"),
-        "/home": (context) => HomePage(title: "Dorfinventar",),
-        "/categories": (context) => CategoryPage(title: "Kategorien"),
-        "/subcategories": (context) => SubCategoryPage(title: "Unterkategorie"),
-        "/myOffers": (context) => MyOffersPage(title: "Meine Inserate",),
-        "/newOffer": (context) => NewOfferPage(title: "Neues Inserat",),
-        "/offerPage": (context) => OfferPage(title: "Inserat: ____",),
-        "/messages": (context) => MessagesPage(title: "Nachrichten",),
-        "/privateMessages": (context) => PrivateMessagesPage(title: "Ausleihen von _____",),
-        "/settings": (context) => SettingsPage(title: "Einstellungen",),
-        "/subsettings": (context) => SubSettingsPage(title: "Untereinstellungen",),
-        "/profile": (context) => ProfilePage(title: "Profil",),
-        "/alienProfile": (context) => AlienProfilePage(title: "Profil von ___",),
-      },
+    return ScopedModel<UserModel>(
+      model: userModel,
+      child: MaterialApp(
+        title: 'Dorfinventar',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        routes: {
+          "/": (context) => StartPage(title: "Dorfinventar"),
+          "/login": (context) => LoginPage(title: "Dorfinventar"),
+          "/register": (context) => RegisterPage(title: "Dorfinventar"),
+          "/home": (context) => HomePage(title: "Dorfinventar",),
+          "/categories": (context) => CategoryPage(title: "Kategorien"),
+          "/subcategories": (context) => SubCategoryPage(title: "Unterkategorie"),
+          "/myOffers": (context) => MyOffersPage(title: "Meine Inserate",),
+          "/newOffer": (context) => NewOfferPage(title: "Neues Inserat",),
+          "/offerPage": (context) => OfferPage(title: "Inserat: ____",),
+          "/messages": (context) => MessagesPage(title: "Nachrichten",),
+          "/privateMessages": (context) => PrivateMessagesPage(title: "Ausleihen von _____",),
+          "/settings": (context) => SettingsPage(title: "Einstellungen",),
+          "/subsettings": (context) => SubSettingsPage(title: "Untereinstellungen",),
+          "/profile": (context) => ProfilePage(title: "Profil",),
+          "/alienProfile": (context) => AlienProfilePage(title: "Profil von ___",),
+        },
+      )
     );
   }
 }

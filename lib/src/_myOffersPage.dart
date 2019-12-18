@@ -1,4 +1,6 @@
+import 'package:Dorfinventar/src/userModel.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'customDrawer.dart';
 
 class MyOffersPage extends StatefulWidget {
@@ -10,7 +12,6 @@ class MyOffersPage extends StatefulWidget {
 }
 
 class _MyOffersPage extends State<MyOffersPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +20,12 @@ class _MyOffersPage extends State<MyOffersPage> {
       ),
       drawer: CustomDrawer(),
       body: _settingsWidget(),
+      floatingActionButton: Builder(
+        builder: (context) => FloatingActionButton(
+          child: Text("+", style: TextStyle(fontSize: 32)),
+          onPressed: () => showSnackbar(context),
+          ),
+        ),
     );
   }
 
@@ -36,5 +43,10 @@ class _MyOffersPage extends State<MyOffersPage> {
         ),
       ],
     );
+  }
+
+  showSnackbar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(
+        SnackBar(content: Text("Sending Message")));
   }
 }

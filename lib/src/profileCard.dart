@@ -5,11 +5,11 @@ class ProfileCard extends Card{
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-        child: Center(
-          child: Card(
+      child: Center(
+        child: Card(
 
-          );
         )
-        )
+      )
+    );
   }
 }

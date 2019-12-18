@@ -25,12 +25,15 @@ dependencies:
   cupertino_icons: ^0.1.2
   sensors: 0.4.1+1
   camera: 0.5.6+3
+  scoped_model: 1.0.1
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+module:
+  androidX: true
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
