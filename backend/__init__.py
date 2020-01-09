@@ -4,9 +4,12 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 
+UPLOAD_FOLDER = 'backend/file_storage/images/'
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'f03b64dca19c7e6e86b419e8c3abf4db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dorfinv.db'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 db = SQLAlchemy(app)
 
 

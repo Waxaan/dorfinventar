@@ -35,6 +35,7 @@ class Article(db.Model):
     status = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
     desc = db.Column(db.String, nullable=False)  
+    img_folder = db.Column(db.String, nullable=False)
     owner = db.Column(db.Integer, db.ForeignKey('user.id'))
     category = db.Column(db.Integer, db.ForeignKey('category.id'))
 
