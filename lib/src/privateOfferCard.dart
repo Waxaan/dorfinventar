@@ -1,3 +1,4 @@
+import 'package:Dorfinventar/src/_myOffersPage.dart';
 import 'package:Dorfinventar/src/_offerPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class PrivateOfferCard extends Card {
                     textColor: Colors.green,
                     child: const Text('Bearbeiten'),
                     onPressed: () => Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => OfferPage(title: this.name,))),
+                      MaterialPageRoute(builder: (context) => MyOffersPage(title: 'Meine Inserate',))),
                     ),
                 ]
               ),

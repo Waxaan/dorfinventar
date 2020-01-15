@@ -82,8 +82,8 @@ class _HomePage extends State<HomePage> {
         "Getriebesand, Kolbenrückholfedern, Keilriemenfett", price: 25.0,),);
     items.add(PublicOfferCard(name: "Kindergeburtstag", description: "Wir richten für Ihr Kind einen unvergesslichen Geburtstag aus!", price: 10.0,),);
     items.add(PublicOfferCard(name: "Klausurlöung Elektrotechnik", description: "Für die Informatiker, "
-        "die einfach nicht wollen", price: 100.0,),
-    );
+        "die einfach nicht wollen", price: 100.0,),);
+    items.add(PublicOfferCard(name: "Spachtel", description: "Noch fast unbenutzt", price: 6.00),);
     return items;
   }
 }
