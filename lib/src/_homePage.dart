@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:loader_search_bar/loader_search_bar.dart';
 import 'customDrawer.dart';
 import 'publicOfferCard.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
 
   HomePage({Key key, this.title, this.loggedIn}) : super(key: key);
   final String title;
   bool loggedIn;
+  Future<List<PublicOfferCard>> offers;
 
 
   @override
@@ -59,6 +61,18 @@ class _HomePage extends State<HomePage> {
     items.addAll(getInterestingOffers());
 
     return items;
+  }
+// https://flutter.dev/docs/cookbook/networking/fetch-data
+  List<Widget> getOnlineOffers() {
+    List<Widget> items = new List<Widget>();
+    Future<http.Response> fetchPost() {
+      return http.get('https://jsonplaceholder.typicode.com/posts/1');
+    }
+
+
+
+
+
   }
 
   List<Widget> getNewOffers() {
