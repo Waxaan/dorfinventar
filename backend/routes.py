@@ -113,3 +113,23 @@ def create_article():
 
     return "200"
     
+@api.route("/search", methods=["GET"])
+def search():
+    """
+    Suche durchfuhrbar mit Url-Parameter q, z.B. /api/search?q=spachtel
+    !!! Achte darauf, dass spachtel nicht von Anführungszeichen umgeben ist, Sonst gibt es keine Suchergebnisse
+
+    Filtern nach status bzw category z.B. via /api/search?q=spachtel&status=active
+    """
+    query = "%{}%".format(request.args.get("q", ""))
+    status = request.args.get("status")
+    category = request.args.get("category")
+    sql = Article.query.filter(Article.name.like(query) | Article.desc.like(query))
+
+    if status:
+        sql = sql.filter(Article.status == status) 
+
+    if category:
+        sql = sql.filter(Article.category == category) 
+
+    return jsonify([r.serialize for r in sql.all()]), 200
