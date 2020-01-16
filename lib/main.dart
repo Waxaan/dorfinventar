@@ -18,6 +18,7 @@ import 'src/_myOffersPage.dart';
 import 'src/_profilePage.dart';
 import 'src/_alienProfilePage.dart';
 import 'src/userModel.dart';
+import 'src/_cameraPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
           "/subsettings": (context) => SubSettingsPage(title: "Untereinstellungen",),
           "/profile": (context) => ProfilePage(title: "Profil",),
           "/alienProfile": (context) => AlienProfilePage(title: "Profil von ___",),
+          "/camera": (context) => CameraPage()
         },
       )
     );

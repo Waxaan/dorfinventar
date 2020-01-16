@@ -2,6 +2,7 @@ import 'package:Dorfinventar/src/privateOfferCard.dart';
 import 'package:Dorfinventar/src/userModel.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:Dorfinventar/src/_newOfferPage.dart';
 import 'customDrawer.dart';
 import 'dart:math';
 
@@ -33,7 +34,9 @@ class _MyOffersPage extends State<MyOffersPage> {
         builder: (context) => FloatingActionButton(
           child: Text("+", style: TextStyle(fontSize: 32)),
           onPressed: () {
-            addNewOffer();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NewOfferPage(title: "Neues Angebot")));
+
             showSnackbar(context);
           },
           ),

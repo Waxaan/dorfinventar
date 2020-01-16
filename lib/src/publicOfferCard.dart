@@ -42,14 +42,14 @@ class PublicOfferCard extends Card {
                       padding: EdgeInsets.only(right: 12),
                       child: Text(getPriceString(this.price))
                     ),
-                    FlatButton(
+                    /*FlatButton(
                       textColor: Colors.green,
                       child: const Text('Anschauen'),
                       onPressed: () {
                         Navigator.push(context,
                         MaterialPageRoute(builder: (context) => OfferPage(title: this.name, description: this.description)));
                       },
-                    ),
+                    ),*/
                     FlatButton(
                       textColor: Colors.green,
                       child: const Text('Nachricht'),
