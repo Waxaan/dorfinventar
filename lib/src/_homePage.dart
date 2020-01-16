@@ -61,8 +61,8 @@ class _HomePage extends State<HomePage> {
     items.addAll(getInterestingOffers());
 
     return items;
-  }
-// https://flutter.dev/docs/cookbook/networking/fetch-data
+    }
+  // https://flutter.dev/docs/cookbook/networking/fetch-data
   List<Widget> getOnlineOffers() {
     List<Widget> items = new List<Widget>();
     Future<http.Response> fetchPost() {

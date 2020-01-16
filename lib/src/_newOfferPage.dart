@@ -12,6 +12,16 @@ class NewOfferPage extends StatefulWidget {
 }
 
 class _NewOfferPage extends State<NewOfferPage> {
+  var ControllerTitle = TextEditingController();
+  var ControllerDescription = TextEditingController();
+  @override
+  void initState() {
+    var _title = "";
+    var _description = "";
+    ControllerTitle.text = _title;
+    ControllerDescription.text = _description;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +36,7 @@ class _NewOfferPage extends State<NewOfferPage> {
 
 
   Widget _settingsWidget() {
-    var ControllerTitle = TextEditingController();
-    var ControllerDescription = TextEditingController();
-    return Column(
+    return ListView(
       children: <Widget>[
         Padding(
           padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
@@ -55,24 +63,19 @@ class _NewOfferPage extends State<NewOfferPage> {
             maxLines: null,)
         ),
         Center(
-          child: Row(
-            children: <Widget>[
-              Center(
-                child: RaisedButton(
-                  onPressed: (){
-                    send_Input_to_server(ControllerTitle.text, ControllerDescription.text);
-                    Navigator.pop(context);
-                  },
-                 child: Text("Angebot einstellen")
-                )
-              )
-            ]
+          child: RaisedButton(
+            onPressed: (){
+              send_Input_to_server(ControllerTitle.text, ControllerDescription.text);
+              Navigator.pop(context);
+              },
+            child: Text("Angebot einstellen")
           )
-        ),
-
+        )
       ]
     );
   }
 
-  void send_Input_to_server(String text, String text2) {}
+  void send_Input_to_server(String text, String text2) {
+
+  }
 }
