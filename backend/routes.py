@@ -2,11 +2,44 @@ import os
 import uuid
 import pathlib
 from passlib.hash import argon2
+from datetime import timedelta
 
 from flask import jsonify, request, Blueprint
 from backend import app, db
 from backend.models import User, Category, Article
 from werkzeug.utils import secure_filename
+from flask_jwt import JWT, jwt_required, current_identity
+
+# USER AUTHENTIFICATION / LOGIN
+# 
+# Most ressources are protected and require a JSON Web Token (JWT). Send a POST request to 
+# /api/auth/login . As body set username and password as form fields! with the corresponding values
+#
+# Response:
+#
+# {
+#  "access_token": "long jwt"
+# }
+#
+# Store this token locally. To access protected ressouces, set as the request header field AU
+# to "JWT $the_jwt". Replace $the_jwt with the actual JWT. Mind the space between JWT and $the_jwt
+def authenticate(username, password):
+    json = request.json
+    user = User.query.filter(User.username == json.get("username", "")).one_or_none()
+    if user and argon2.verify(password, user.password):
+        return user
+    return None
+
+# returns user object from database by using the user id stored inside the jwt
+def identity(payload):
+    user_id = payload['identity']
+    return User.query.filter(User.id == user_id).one_or_none()
+
+jwt = JWT(app, authenticate, identity)
+app.config['SECRET_KEY'] = os.getenv("DORFINV_SECRET")
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(days=30)
+app.config['JWT_AUTH_URL_RULE'] = "api/auth/login" # url to get jwt token
+
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 def allowed_file(filename):
@@ -35,7 +68,6 @@ def register():
     password = request.form.get("password", "")
 
     password = argon2.hash(password)
-
     email    = request.form.get("email", "")
 
     if not (username and password and email):
@@ -50,21 +82,6 @@ def register():
     return jsonify(user.serialize), 201
 
 
-@api.route("auth/login", methods=['POST'])
-def login():
-    user = request.form.get("username", "")
-    password = request.form.get("password", "")
-
-    if not password or not user:
-        return error("Please enter a username and password."), 400
-    
-    user_obj = User.query.filter(User.username == user).one_or_none()
-    print(user_obj)
-    if user_obj is None or not argon2.verify(password, user_obj.password):
-        return error("Wrong username or password."), 401
-    
-    # login
-    return "login", 200
 
 @api.route("categories/", methods=["GET"])
 def get_categories():
@@ -83,6 +100,7 @@ def get_articles():
     return jsonify([c.serialize for c in query.filter().all()]), 200
 
 @api.route("articles/", methods=["PUT"])
+@jwt_required()
 def update_article():
     id = request.form.get('id', -1)
 
@@ -102,6 +120,7 @@ def update_article():
     return jsonify(article.serialize), 200
 
 @api.route("article/", methods=["POST"])
+@jwt_required()
 def create_article():
     name = request.form.get('name', '')
     category = request.form.get('category', '')
@@ -129,33 +148,7 @@ def create_article():
             new_filename = "img%s.%s" %(index, secure_filename(image.filename).split(".")[-1])
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid, new_filename))
 
-<<<<<<< HEAD
     return jsonify(article.serialize), 201
-=======
-    return "200"
-
-@api.route("chat/messages", methods=['POST'])
-def send_message()
-    # not sure if data inside form or plain json
-    subject = form.request.get("subject", "")
-    origin_user = "token.get_username"
-    other_user = form.request.get("user2", "")
-    # step0: check if subject not null
-    if not subject:
-        return error("Subject not specified"), 400
-    # step1: check if origin and other participant exist
-    origin_user_obj = User.query.filter(User.username == origin_user).one_or_none()
-    other_user_obj = User.query.filter(User.username == other_user).one_or_none()
-
-    if origin_user_obj is None:
-        return error("Could not find sender in db: %s" % origin_user), 404
-    if other_user_obj is None:
-        return error("Could not find participant in db: %s" % other_user), 404
-
-    # step2: check if conversation between origin and participant already exist
-        # step2.1: falls ja: message zur conversation hinzufügen
-        # step2.2: falls nein: create conversation, add message to conversation
->>>>>>> password hashing, first chatting support
     
 @api.route("/search", methods=["GET"])
 def search():
