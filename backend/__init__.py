@@ -10,6 +10,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'f03b64dca19c7e6e86b419e8c3abf4db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dorfinv.db'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024 # 4 MB UploadSize Limit
 db = SQLAlchemy(app)
 
 
