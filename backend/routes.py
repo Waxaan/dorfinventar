@@ -1,9 +1,9 @@
 import os
 import uuid
 import pathlib
-from passlib.hash import argon2
-from datetime import timedelta
 
+from passlib.hash import argon2
+from datetime import datetime
 from flask import jsonify, request, Blueprint
 from backend import app, db
 from backend.models import User, Category, Article, Conversation, Message
@@ -21,7 +21,7 @@ from flask_jwt import JWT, jwt_required, current_identity
 #  "access_token": "long jwt"
 # }
 #
-# Store this token locally. To access protected ressouces, set as the request header field AU
+# Store this token locally. To access protected ressouces, set as the request header field Authorization
 # to "JWT $the_jwt". Replace $the_jwt with the actual JWT. Mind the space between JWT and $the_jwt
 def authenticate(username, password):
     json = request.json
@@ -36,9 +36,6 @@ def identity(payload):
     return User.query.filter(User.id == user_id).one_or_none()
 
 jwt = JWT(app, authenticate, identity)
-app.config['SECRET_KEY'] = os.getenv("DORFINV_SECRET")
-app.config['JWT_EXPIRATION_DELTA'] = timedelta(days=30)
-app.config['JWT_AUTH_URL_RULE'] = "api/auth/login" # url to get jwt token
 
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -80,8 +77,6 @@ def register():
     db.session.add(user)
     db.session.commit()
     return jsonify(user.serialize), 201
-
-
 
 @api.route("categories/", methods=["GET"])
 def get_categories():
@@ -128,8 +123,9 @@ def create_article():
     category = request.form.get('category', '')
     desc = request.form.get('desc', '')
     price = request.form.get('price', 0.0)
-    # need middleware here
-    owner = "Albert"
+
+
+    owner = current_identity.username
     
     if not (name and category and desc and price and owner):
         return error("Name, description, category, price and owner must be specified"), 401
@@ -153,12 +149,12 @@ def create_article():
     return jsonify(article.serialize), 201
 
 @api.route("chat/messages/", methods=['POST'])
+@jwt_required()
 def send_message():
     # not sure if data inside form or plain json
     msg = request.form.get("message", "")
     subject = request.form.get("subject", "")
-    #origin_user = "token.get_username" v debugging
-    origin_user = request.form.get("user1", "")
+    origin_user = current_identity.username
     other_user = request.form.get("user2", "")
     # step0: check if subject and message are not None
     if not subject:
@@ -166,7 +162,7 @@ def send_message():
     if not msg:
         return error("Message cannot be empty"), 400
     # step1: check if origin and other participant exist
-    origin_user_obj = User.query.filter(User.username == origin_user).one_or_none()
+    origin_user_obj = current_identity
     other_user_obj = User.query.filter(User.username == other_user).one_or_none()
 
     if origin_user_obj is None:
@@ -182,7 +178,8 @@ def send_message():
     
     # step2.1: falls ja: message zur conversation hinzufügen
     if conv:
-        msg_obj = Message(conversation_id=conv.id, message=msg, message_date=datetime.datetime.now())
+        msg_obj = Message(conversation_id=conv.id, message=msg, sender=origin_user_obj.username,\
+                          recipient=other_user_obj.username, message_date=datetime.now())
         db.session.add(msg_obj)    
     # step2.2: falls nein: create conversation, add message to conversation
     else:
@@ -190,13 +187,18 @@ def send_message():
         db.session.add(conv_obj)
         db.session.flush()
         msg_obj = Message(conversation_id=conv_obj.id, message=msg, sender=origin_user_obj.username,\
-                          recipient=other_user_obj.username, message_date=datetime.datetime.now())
+                          recipient=other_user_obj.username, message_date=datetime.now())
         db.session.add(msg_obj)
 
     db.session.commit()
-    return "lol"
+    return "200", 200
         
-    
+
+
+
+
+
+# deprecated
 @api.route("/search", methods=["GET"])
 def search():
     """
