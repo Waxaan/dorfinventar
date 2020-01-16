@@ -49,7 +49,7 @@ def register():
 
 @api.route("categories", methods=["GET"])
 def get_categories():
-    return jsonify([c.serialize for c in Category.query.all()])
+    return jsonify([c.serialize for c in Category.query.all()]), 200
 
 @api.route("articles/", methods=["GET"])
 def get_articles():
@@ -61,11 +61,10 @@ def get_articles():
     if request.args['status']:
         query = query.filter(Article.status.ilike(request.args['status']))
 
-    return jsonify([c.serialize for c in query.filter().all()])
+    return jsonify([c.serialize for c in query.filter().all()]), 200
 
 @api.route("articles/", methods=["PUT"])
 def update_article():
-
     id = request.form.get('id', -1)
 
     article = Article.query.filter(Article.id == 'id').one_or_none()
@@ -81,7 +80,7 @@ def update_article():
         article.status = request.form["status"]
 
     db.session.commit()
-    return jsonify(article.serialize)
+    return jsonify(article.serialize), 200
 
 @api.route("article/", methods=["POST"])
 def create_article():
@@ -111,7 +110,7 @@ def create_article():
             new_filename = "img%s.%s" %(index, secure_filename(image.filename).split(".")[-1])
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid, new_filename))
 
-    return "200"
+    return jsonify(article.serialize), 201
     
 @api.route("/search", methods=["GET"])
 def search():
