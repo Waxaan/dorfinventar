@@ -1,11 +1,12 @@
 import os
 import uuid
 import pathlib
-from passlib.hash import argon2
+import datetime
 
+from passlib.hash import argon2
 from flask import jsonify, request, Blueprint
 from backend import app, db
-from backend.models import User, Category, Article
+from backend.models import User, Category, Article, Conversation, Message
 from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
@@ -33,15 +34,15 @@ def register():
     #data = request.get_json()
     username = request.form.get("username", "").lower() # to normalize usernames
     password = request.form.get("password", "")
+    email    = request.form.get("email", "")
 
     password = argon2.hash(password)
 
-    email    = request.form.get("email", "")
 
     if not (username and password and email):
         return error("Please set a username, password and email address for the registration"), 400
 
-    if User.query.filter_by(username=username, email=email).first():
+    if User.query.filter((User.username==username) | (User.email==email)).first():
         return error(f"An account with username '{username}' or email address '{email}' already exists"), 400
 
     user = User(username=username, password=password, email=email)
@@ -73,8 +74,10 @@ def get_categories():
 @api.route("articles/", methods=["GET"])
 def get_articles():
     query = Article.query
-    if request.args['query']:
-        query = query.filter(Article.name.ilike("%"+request.args['query']+"%"))
+    if request.args['name']:
+        query = query.filter(Article.name.ilike("%"+request.args['name']+"%"))
+    if request.args['desc']:
+        query = query.filter(Article.name.ilike("%"+request.args['desc']+"%"))
     if request.args['category']:
         query = query.filter(Article.category.ilike(request.args['category']))
     if request.args['status']:
@@ -129,20 +132,21 @@ def create_article():
             new_filename = "img%s.%s" %(index, secure_filename(image.filename).split(".")[-1])
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid, new_filename))
 
-<<<<<<< HEAD
     return jsonify(article.serialize), 201
-=======
-    return "200"
 
-@api.route("chat/messages", methods=['POST'])
-def send_message()
+@api.route("chat/messages/", methods=['POST'])
+def send_message():
     # not sure if data inside form or plain json
-    subject = form.request.get("subject", "")
-    origin_user = "token.get_username"
-    other_user = form.request.get("user2", "")
-    # step0: check if subject not null
+    msg = request.form.get("message", "")
+    subject = request.form.get("subject", "")
+    #origin_user = "token.get_username" v debugging
+    origin_user = request.form.get("user1", "")
+    other_user = request.form.get("user2", "")
+    # step0: check if subject and message are not None
     if not subject:
-        return error("Subject not specified"), 400
+        return error("Cannot fetch article title"), 400
+    if not msg:
+        return error("Message cannot be empty"), 400
     # step1: check if origin and other participant exist
     origin_user_obj = User.query.filter(User.username == origin_user).one_or_none()
     other_user_obj = User.query.filter(User.username == other_user).one_or_none()
@@ -153,9 +157,27 @@ def send_message()
         return error("Could not find participant in db: %s" % other_user), 404
 
     # step2: check if conversation between origin and participant already exist
-        # step2.1: falls ja: message zur conversation hinzufügen
-        # step2.2: falls nein: create conversation, add message to conversation
->>>>>>> password hashing, first chatting support
+
+    conv = Conversation.query.filter(Conversation.user1.in_([origin_user, other_user]) & \
+                                     Conversation.user2.in_([origin_user, other_user]))\
+                                    .one_or_none()
+    
+    # step2.1: falls ja: message zur conversation hinzufügen
+    if conv:
+        msg_obj = Message(conversation_id=conv.id, message=msg, message_date=datetime.datetime.now())
+        db.session.add(msg_obj)    
+    # step2.2: falls nein: create conversation, add message to conversation
+    else:
+        conv_obj = Conversation(subject=subject, user1=origin_user_obj.username, user2=other_user_obj.username)
+        db.session.add(conv_obj)
+        db.session.flush()
+        msg_obj = Message(conversation_id=conv_obj.id, message=msg, sender=origin_user_obj.username,\
+                          recipient=other_user_obj.username, message_date=datetime.datetime.now())
+        db.session.add(msg_obj)
+
+    db.session.commit()
+    return "lol"
+        
     
 @api.route("/search", methods=["GET"])
 def search():

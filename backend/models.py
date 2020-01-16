@@ -3,8 +3,7 @@ import datetime
 
 class User(db.Model):
     __tablename__ = 'user'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String, unique=True, nullable=False)
+    username = db.Column(db.String, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
 
@@ -36,7 +35,7 @@ class Article(db.Model):
     name = db.Column(db.String, nullable=False)
     desc = db.Column(db.String, nullable=False)  
     img_folder = db.Column(db.String, nullable=False)
-    owner = db.Column(db.Integer, db.ForeignKey('user.id'))
+    owner = db.Column(db.String, db.ForeignKey('user.username'))
     category = db.Column(db.Integer, db.ForeignKey('category.id'))
 
     @property
@@ -65,8 +64,8 @@ class Conversation(db.Model):
     __tablename__ = 'conversation'
     id = db.Column(db.Integer, primary_key=True)
     subject = db.Column(db.String, nullable=False)    
-    user1 = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user2 = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user1 = db.Column(db.String, db.ForeignKey('user.username'))
+    user2 = db.Column(db.String, db.ForeignKey('user.username'))
     messages = db.relationship("Message", cascade="all, delete, delete-orphan", backref="conversation")
 
     @property
@@ -84,7 +83,9 @@ class Message(db.Model):
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'))
     message = db.Column(db.String, nullable=False)
     message_date = db.Column(db.DateTime, nullable=False)
-
+    sender = db.Column(db.String, db.ForeignKey('user.username'), nullable=False)
+    recipient = db.Column(db.String, db.ForeignKey('user.username'), nullable=False)
+   
     @property
     def serialize(self):
         return {

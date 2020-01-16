@@ -40,7 +40,8 @@ class ConversationView(ModelView):
     column_display_pk = True
 
 class MessageView(ModelView):
-    column_display_pk = True    
+    column_display_pk = True
+    form_columns = ('id', 'sender', 'recipient', 'message', 'message_date')
 
 admin.add_view(UserView(User, db.session, 'User'))
 admin.add_view(CategoryView(Category, db.session, 'Category'))
