@@ -57,14 +57,13 @@ api = Blueprint("api", __name__)
 
 @api.route("auth/register", methods=["POST"])
 def register():
-    #if not request.is_json:
-     #   return error("Expected data to be JSON encoded"), 400
+    if not request.is_json:
+        return error("Expected data to be JSON encoded"), 400
     
-    #data = request.get_json()
-    username = request.form.get("username", "").lower() # to normalize usernames
-    password = request.form.get("password", "")
-    email    = request.form.get("email", "")
-
+    data = request.get_json()
+    username = data.get("username", "").lower() # to normalize usernames
+    password = data.get("password", "")
+    email    = data.get("email", "")
     password = argon2.hash(password)
 
     if not (username and password and email):
