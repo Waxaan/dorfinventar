@@ -201,14 +201,28 @@ def send_message():
         db.session.add(msg_obj)
 
     db.session.commit()
-    return "200", 200
+    return jsonify(conv.serialize), 200
 
 
 @app.route("/api/chat/messages/", methods=['GET'])
 @jwt_required()
-def get_message():
+def get_all_messages():
     """Get all the messages in which currently logged in user participates. He can be identified by his username set in the JWT."""
     user = current_identity
     convs = Conversation.query.filter((Conversation.user1==user.username) | (Conversation.user2==user.username)).all()
     return jsonify([c.serialize for c in convs]), 200
 
+
+@app.route("/api/chat/messages/<id>", methods=['GET'])
+@jwt_required()
+def get_message(id):
+    """Get all the messages in which currently logged in user participates. He can be identified by his username set in the JWT."""
+    user = current_identity
+    conv = Conversation.query.filter(((Conversation.user1==user.username) | (Conversation.user2==user.username)) & (Conversation.id==id)).one_or_none()
+
+    print(conv)
+
+    if not conv:
+        return error(f"Either no conversation with id {id} found or access denied."), 404
+
+    return jsonify(conv.serialize), 200

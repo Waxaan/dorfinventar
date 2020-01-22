@@ -74,7 +74,8 @@ class Conversation(db.Model):
         return {
             "subject": self.subject,
             "participants": [self.user1, self.user2],
-            "messages": [m.serialize for m in self.messages]
+            "messages": [m.serialize for m in self.messages],
+            "id": self.id
         }    
 
 
