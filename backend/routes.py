@@ -164,7 +164,7 @@ def send_message():
     
     msg = data.get("message", "")
     subject = data.get("subject", "")
-    origin_user = data.username
+    origin_user = data.get("username", "")
     other_user = data.get("user2", "")
     # step0: check if subject and message are not None
     if not subject:
@@ -202,3 +202,13 @@ def send_message():
 
     db.session.commit()
     return "200", 200
+
+
+@app.route("/api/chat/messages/", methods=['GET'])
+@jwt_required()
+def get_message():
+    """Get all the messages in which currently logged in user participates. He can be identified by his username set in the JWT."""
+    user = current_identity
+    convs = Conversation.query.filter((Conversation.user1==user.username) | (Conversation.user2==user.username)).all()
+    return jsonify([c.serialize for c in convs]), 200
+
