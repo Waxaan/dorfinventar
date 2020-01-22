@@ -51,7 +51,7 @@ def error(msg):
 def dashboard():
     return error("Admin template. No data to retrieve"), 400
 
-@app.route("api/auth/register", methods=["POST"])
+@app.route("/api/auth/register", methods=["POST"])
 def register():
     if not request.is_json:
         return error("Expected data to be JSON encoded"), 400
@@ -74,11 +74,11 @@ def register():
     db.session.commit()
     return jsonify(user.serialize), 201
 
-@app.route("api/categories/", methods=["GET"])
+@app.route("/api/categories/", methods=["GET"])
 def get_categories():
     return jsonify([c.serialize for c in Category.query.all()]), 200
 
-@app.route("api/articles/", methods=["GET"])
+@app.route("/api/articles/", methods=["GET"])
 def get_articles():
     query = Article.query
     if request.args['name']:
@@ -92,7 +92,7 @@ def get_articles():
 
     return jsonify([c.serialize for c in query.filter().all()]), 200
 
-@app.route("api/articles/", methods=["PUT"])
+@app.route("/api/articles/", methods=["PUT"])
 @jwt_required()
 def update_article():
 
@@ -116,7 +116,7 @@ def update_article():
     db.session.commit()
     return jsonify(article.serialize), 200
 
-@app.route("api/article/", methods=["POST"])
+@app.route("/api/article/", methods=["POST"])
 @jwt_required()
 def create_article():
 
@@ -153,7 +153,7 @@ def create_article():
 
     return jsonify(article.serialize), 201
 
-@app.route("api/chat/messages/", methods=['POST'])
+@app.route("/api/chat/messages/", methods=['POST'])
 @jwt_required()
 def send_message():
 
