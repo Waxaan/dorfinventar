@@ -51,11 +51,7 @@ def error(msg):
 def dashboard():
     return error("Admin template. No data to retrieve"), 400
 
-# The blueprint allows the grouping of multiple request. During registration a prefix for all
-# urls can be specified
-api = Blueprint("api", __name__)
-
-@api.route("auth/register", methods=["POST"])
+@app.route("api/auth/register", methods=["POST"])
 def register():
     if not request.is_json:
         return error("Expected data to be JSON encoded"), 400
@@ -78,11 +74,11 @@ def register():
     db.session.commit()
     return jsonify(user.serialize), 201
 
-@api.route("categories/", methods=["GET"])
+@app.route("api/categories/", methods=["GET"])
 def get_categories():
     return jsonify([c.serialize for c in Category.query.all()]), 200
 
-@api.route("articles/", methods=["GET"])
+@app.route("api/articles/", methods=["GET"])
 def get_articles():
     query = Article.query
     if request.args['name']:
@@ -96,7 +92,7 @@ def get_articles():
 
     return jsonify([c.serialize for c in query.filter().all()]), 200
 
-@api.route("articles/", methods=["PUT"])
+@app.route("api/articles/", methods=["PUT"])
 @jwt_required()
 def update_article():
 
@@ -120,7 +116,7 @@ def update_article():
     db.session.commit()
     return jsonify(article.serialize), 200
 
-@api.route("article/", methods=["POST"])
+@app.route("api/article/", methods=["POST"])
 @jwt_required()
 def create_article():
 
@@ -157,7 +153,7 @@ def create_article():
 
     return jsonify(article.serialize), 201
 
-@api.route("chat/messages/", methods=['POST'])
+@app.route("api/chat/messages/", methods=['POST'])
 @jwt_required()
 def send_message():
 
@@ -206,30 +202,3 @@ def send_message():
 
     db.session.commit()
     return "200", 200
-        
-
-
-
-uri = '127.0.0.1:5000/api/auth/login'
-
-
-# deprecated
-@api.route("/search", methods=["GET"])
-def search():
-    """
-    Suche durchfuhrbar mit Url-Parameter q, z.B. /api/search?q=spachtel
-    !!! Achte darauf, dass spachtel nicht von Anführungszeichen umgeben ist, Sonst gibt es keine Suchergebnisse
-    Filtern nach status bzw category z.B. via /api/search?q=spachtel&status=active
-    """
-    query = "%{}%".format(request.args.get("q", ""))
-    status = request.args.get("status")
-    category = request.args.get("category")
-    sql = Article.query.filter(Article.name.like(query) | Article.desc.like(query))
-
-    if status:
-        sql = sql.filter(Article.status == status) 
-
-    if category:
-        sql = sql.filter(Article.category == category) 
-
-    return jsonify([r.serialize for r in sql.all()]), 200
