@@ -64,6 +64,7 @@ def register():
     username = data.get("username", "").lower() # to normalize usernames
     password = data.get("password", "")
     email    = data.get("email", "")
+
     password = argon2.hash(password)
 
     if not (username and password and email):
@@ -98,7 +99,11 @@ def get_articles():
 @api.route("articles/", methods=["PUT"])
 @jwt_required()
 def update_article():
-    id = request.form.get('id', -1)
+
+    if not request.is_json:
+        return error("Expected data to be JSON encoded"), 400
+    
+    _id = request.get_json().get('id', -1)
 
     article = Article.query.filter(Article.id == id).one_or_none()
     if article is None:
@@ -118,11 +123,16 @@ def update_article():
 @api.route("article/", methods=["POST"])
 @jwt_required()
 def create_article():
-    name = request.form.get('name', '')
-    category = request.form.get('category', '')
-    desc = request.form.get('desc', '')
-    price = request.form.get('price', 0.0)
 
+    if not request.is_json:
+        return error("Expected data to be JSON encoded"), 400
+    
+    data = request.get_json()
+
+    name = data.get('name', '')
+    category = data.get('category', '')
+    desc = data.get('desc', '')
+    price = data.get('price', 0.0)
 
     owner = current_identity.username
     
@@ -150,11 +160,16 @@ def create_article():
 @api.route("chat/messages/", methods=['POST'])
 @jwt_required()
 def send_message():
-    # not sure if data inside form or plain json
-    msg = request.form.get("message", "")
-    subject = request.form.get("subject", "")
-    origin_user = current_identity.username
-    other_user = request.form.get("user2", "")
+
+    if not request.is_json:
+        return error("Expected data to be JSON encoded"), 400
+    
+    data = request.get_json()
+    
+    msg = data.get("message", "")
+    subject = data.get("subject", "")
+    origin_user = data.username
+    other_user = data.get("user2", "")
     # step0: check if subject and message are not None
     if not subject:
         return error("Cannot fetch article title"), 400
@@ -195,6 +210,7 @@ def send_message():
 
 
 
+uri = '127.0.0.1:5000/api/auth/login'
 
 
 # deprecated
