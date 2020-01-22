@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customDrawer.dart';
+import 'package:Dorfinventar/src/customDrawer.dart';
 
 class PrivateMessagesPage extends StatefulWidget {
   PrivateMessagesPage({Key key, this.title}) : super(key: key);

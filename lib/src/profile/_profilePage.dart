@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customDrawer.dart';
+import '../customDrawer.dart';
 import 'profileCard.dart';
 
 class ProfilePage extends StatefulWidget {

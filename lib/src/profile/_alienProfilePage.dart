@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customDrawer.dart';
+import '../customDrawer.dart';
 
 class AlienProfilePage extends StatefulWidget {
   AlienProfilePage({Key key, this.title}) : super(key: key);

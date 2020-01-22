@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'customDrawer.dart';
+import 'package:Dorfinventar/src/customDrawer.dart';
 
 class SubCategoryPage extends StatefulWidget {
   SubCategoryPage({Key key, this.title}) : super(key: key);

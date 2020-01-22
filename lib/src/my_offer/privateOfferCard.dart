@@ -1,5 +1,5 @@
-import 'package:Dorfinventar/src/_myOffersPage.dart';
-import 'package:Dorfinventar/src/_offerPage.dart';
+import 'package:Dorfinventar/src/my_offer/_myOffersPage.dart';
+import 'package:Dorfinventar/src/public_offers/_offerPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +27,7 @@ class PrivateOfferCard extends Card {
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
                   child: Text(this.name),
                 ),
-                subtitle: Text(this.description, overflow: TextOverflow.ellipsis,maxLines: 3,),
+                subtitle: Text(this.description, overflow: TextOverflow.ellipsis, maxLines: 3,),
               ),
               Divider(),
               Row(

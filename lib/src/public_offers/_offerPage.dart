@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'customDrawer.dart';
+import '../customDrawer.dart';
 
 class OfferPage extends StatefulWidget {
 
