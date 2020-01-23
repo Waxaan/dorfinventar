@@ -22,6 +22,9 @@ class Category(db.Model):
     name = db.Column(db.String, unique=True, nullable=False)
     desc = db.Column(db.String, nullable=False)
 
+    def __repr__(self):
+        return "<Category(id='%s', name='%s')>" % (self.id, self.name)
+
     @property
     def serialize(self):
         return {
@@ -37,7 +40,9 @@ class Article(db.Model):
     desc = db.Column(db.String, nullable=False)  
     img_folder = db.Column(db.String, nullable=False)
     owner = db.Column(db.String, db.ForeignKey('user.username'))
-    category = db.Column(db.Integer, db.ForeignKey('category.id'))
+    
+    cat_id = db.Column(db.Integer, db.ForeignKey('category.id')) 
+    category = db.relationship("Category")
 
     @property
     def serialize(self):
@@ -45,7 +50,8 @@ class Article(db.Model):
             "status": self.status,
             "name": self.name,
             "description": self.desc,
-            "category": self.category
+            "category_id": self.category.id,
+            "category_name": self.category.name
         }
 
 class Image(db.Model):

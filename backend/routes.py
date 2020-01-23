@@ -135,13 +135,16 @@ def create_article():
     if not (name and category and desc):
         return error("Name, description and category must be specified"), 401
 
-    #if not request.files:
+    category_obj = Category.query.filter(Category.id == category).one_or_none()
+    if category_obj is None:
+        return error("Category with ID %s not found." % category), 404
+            #if not request.files:
     #    return error("Need at least one image to create article"), 401
 
     img_folder_uuid = uuid.uuid4().hex
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
 
-    article = Article(status='active', name=name, desc=desc, img_folder=img_folder_uuid, owner=owner,category=category)
+    article = Article(status='active', name=name, desc=desc, img_folder=img_folder_uuid, owner=owner, category=category_obj)
     db.session.add(article)
     db.session.commit()
 
