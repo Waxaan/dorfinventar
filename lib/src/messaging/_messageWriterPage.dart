@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:Dorfinventar/src/customDrawer.dart';
 import 'package:Dorfinventar/src/messaging/messageTile.dart';
+import 'package:Dorfinventar/src/helpers.dart';
 
 
 class MessagesWriterPage extends StatefulWidget {
@@ -25,20 +26,37 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Chat mit " + widget.username),
       ),
       drawer: CustomDrawer(),
-      body: Center(
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return items[index];
-          },
-        ),
-      )
+      body: new Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return items[index];
+            },
+            )
+          ),
+          Card(
+            child: ListTile(
+              title: TextField(),
+              trailing: FlatButton(
+                onPressed: () => showSnackbar(context, message: "Nachricht gesendet"),
+                child: Icon(Icons.send)
+              )
+            )
+          )
+        ],
+      ),
     );
   }
+
 
 
   List<MessageTile> getItems(String username) {

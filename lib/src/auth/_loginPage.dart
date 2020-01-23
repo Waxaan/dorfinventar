@@ -1,6 +1,7 @@
 import 'package:Dorfinventar/src/userModel.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:Dorfinventar/src/helpers.dart';
 
 /*  Login Page
       Nur die Login-Seite der App
@@ -20,6 +21,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPage extends State<LoginPage> {
+  final myControllerName = TextEditingController();
+  final myControllerPass = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +30,21 @@ class _LoginPage extends State<LoginPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: _loginWidget(),
+      body: _loginWidget(myControllerName, myControllerPass),
     );
+
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myControllerName.dispose();
+    myControllerPass.dispose();
+    super.dispose();
   }
 
 
-  Widget _loginWidget() {
+  Widget _loginWidget(TextEditingController myControllerName, TextEditingController myControllerPass) {
     return Center(
       child: Padding(
         padding: EdgeInsets.all(24.0),
@@ -41,18 +53,27 @@ class _LoginPage extends State<LoginPage> {
           return Column(
             children: <Widget>[
               TextFormField(
+                controller: myControllerName,
                 decoration: InputDecoration(
                     labelText: "Benutzername"
                 ),),
               TextFormField( obscureText: true,
+                controller: myControllerPass,
                 decoration: InputDecoration(
                     labelText: "Passwort"
                 ),),
               RaisedButton(
-                  onPressed: () {
-                    model.login();
+                onPressed: () async {
+                  int loginCode = await model.login(name: myControllerName.text,
+                      password: myControllerPass.text);
+                  if (loginCode == 0) { // successful
                     Navigator.pushNamed(context, "/home");
-                    },
+                  } else if (loginCode == 1) {
+                    showSnackbar(context, message: "Eines oder mehrere Textfelder leer");
+                  } else if (loginCode == 2) {
+                    showSnackbar(context, message: "Invalide Logindaten");
+                  }
+                },
                   child: Text("Login"),
               ),
               Text("Besitzen Sie noch keinen Account?"),
@@ -65,5 +86,7 @@ class _LoginPage extends State<LoginPage> {
           )
       )
     );
+
   }
+
 }

@@ -20,7 +20,7 @@ class MessageTile extends ListTile {
               color: Colors.green,
               child: ListTile(
                 subtitle: Text(this.content, overflow: TextOverflow.ellipsis,maxLines: 10,
-                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)),
+                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.25)),
                ),
              )
            )
@@ -36,7 +36,7 @@ class MessageTile extends ListTile {
             child: Card(
               child: ListTile(
                 subtitle: Text(this.content, overflow: TextOverflow.ellipsis,maxLines: 10,
-                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.5)),
+                  style: DefaultTextStyle.of(context).style.apply(fontSizeFactor: 1.25)),
               ),
             )
           )

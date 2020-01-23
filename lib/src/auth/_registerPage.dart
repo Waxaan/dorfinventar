@@ -1,5 +1,8 @@
+import 'package:Dorfinventar/src/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import '../customDrawer.dart';
+import '../userModel.dart';
 
 
 /*  Register Page
@@ -17,6 +20,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPage extends State<RegisterPage> {
+  final myControllerName = TextEditingController();
+  final myControllerEmail = TextEditingController();
+  final myControllerPass = TextEditingController();
+  final myControllerPass2 = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,39 +31,68 @@ class _RegisterPage extends State<RegisterPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: _settingsWidget(),
+      body: _settingsWidget(myControllerName, myControllerEmail, myControllerPass, myControllerPass2),
     );
   }
 
 
-  Widget _settingsWidget() {
+
+  Widget _settingsWidget(TextEditingController myControllerName, TextEditingController myControllerEmail,
+                         TextEditingController myControllerPass, TextEditingController myControllerPass2) {
     return Center(
-      child: Padding(
-        padding: EdgeInsets.all(24.0),
-        child: Column(
-          children: <Widget>[
-            Text("Vielen Dank für Ihre Entscheidung sich bei uns zu registrieren"),
-            TextFormField( decoration: InputDecoration(
-                labelText: "Benutzername"
-            ),),
-            TextFormField( decoration: InputDecoration(
-                labelText: "E-Mail"
-            ),),
-            TextFormField( obscureText: true,
-              decoration: InputDecoration(
-                  labelText: "Passwort"
-              ),),
-            TextFormField( obscureText: true,
-              decoration: InputDecoration(
-                  labelText: "Passwort bestätigen"
-              ),),
-            RaisedButton(
-               onPressed: () => Navigator.pushNamed(context, "/login"),
-               child: Text("Registrieren"),
-            ),
-          ],
-        ),
-      ),
+      child: ScopedModelDescendant<UserModel>(
+        builder: (context, child, model) {
+          return Padding(
+            padding: EdgeInsets.all(24.0),
+            child: ListView(
+              children: <Widget>[
+                Text("Vielen Dank für Ihre Entscheidung sich bei uns zu registrieren"),
+                TextFormField(
+                  controller: myControllerName,
+                  decoration: InputDecoration(
+                    labelText: "Benutzername"
+                ),),
+                TextFormField(
+                  controller: myControllerEmail,
+                  decoration: InputDecoration(
+                    labelText: "E-Mail"
+                ),),
+                TextFormField( obscureText: true,
+                  controller: myControllerPass,
+                  decoration: InputDecoration(
+                      labelText: "Passwort"
+                  ),),
+                TextFormField( obscureText: true,
+                  controller: myControllerPass2,
+                  decoration: InputDecoration(
+                      labelText: "Passwort bestätigen"
+                  ),),
+                RaisedButton(
+                   onPressed: () async {
+                     int code = await model.register(name: myControllerName.text, email: myControllerEmail.text,
+                                    pass: myControllerPass.text, pass2: myControllerPass2.text);
+                     if (code == 0) {
+                       Navigator.pushNamed(context, "/login");                       
+                     } else {
+                       showSnackbar(context, message: "Eines oder mehrere Textfelder leer");
+                     }
+                   },
+                   child: Text("Registrieren"),
+                ),
+            ],
+          ),
+        );
+        }
+      )
     );
+  }
+
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myControllerName.dispose();
+    myControllerPass.dispose();
+    super.dispose();
   }
 }

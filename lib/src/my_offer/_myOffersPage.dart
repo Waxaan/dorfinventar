@@ -17,9 +17,10 @@ class MyOffersPage extends StatefulWidget {
 class _MyOffersPage extends State<MyOffersPage> {
   @override
   List<Widget> items = new List<Widget>();
+
   void initState() {
     super.initState();
-    items = getPrivateOffers();
+    items.addAll(getPrivateOffers());
   }
 
   @override
@@ -32,11 +33,11 @@ class _MyOffersPage extends State<MyOffersPage> {
       body: _settingsWidget(),
       floatingActionButton: Builder(
         builder: (context) => FloatingActionButton(
-          child: Text("+", style: TextStyle(fontSize: 32)),
+          child: Text("+", style: TextStyle(fontSize: 48)),
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => NewOfferPage(title: "Neues Angebot")));
-
+            items.add(getNewOffer());
             showSnackbar(context);
           },
           ),
@@ -48,11 +49,11 @@ class _MyOffersPage extends State<MyOffersPage> {
   Widget _settingsWidget() {
     return Center(
       child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return items[index];
-        },
-      ),
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return items[index];
+          },
+        ),
     );
   }
 
@@ -80,7 +81,23 @@ class _MyOffersPage extends State<MyOffersPage> {
   }
 
   List<Widget> getPrivateOffers() {
-    List<Widget> items = new List<Widget>();
-    return items;
+    List<Widget> offers = new List<Widget>();
+    offers.add(GestureDetector(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => NewOfferPage(title: "Neues Angebot")));
+          items.add(getNewOffer());
+          showSnackbar(context);
+        },
+        child: Card(
+          color: Colors.green,
+            child: ListTile(
+              title: Center(
+                  child: Text("+", style: TextStyle(fontSize: 48),)
+              ),
+            )
+        )
+    ));
+    return offers;
   }
 }
