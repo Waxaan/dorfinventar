@@ -1,45 +1,50 @@
-import 'package:flutter/material.dart';
+import 'httpClient.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:http/http.dart' as http;
 
 class UserModel extends Model {
   bool loggedIn = false;
-  bool get loginStatus=> loggedIn;
+  bool get loginStatus => loggedIn;
 
-  Future login({String name, String password}) async {
-    String url = 'https://jsonplaceholder.typicode.com/posts';
-    http.Response response = await http.get(url);
 
-    int statusCode = response.statusCode;
-    //print(statusCode);
-    Map<String, String> headers = response.headers;
-    String contentType = headers['content-type'];
-    String json = response.body;
-    //print(json);
+  Client client = new Client();
 
-    print("name: " + name + "   pass: " + password);
-    if (name.length > 1 &&  password.length > 1) {
+
+  LogMeIn() async{
+    String token = await client.getToken();
+
+    if (token != null){
       loggedIn = true;
       notifyListeners();
-    } else {
-      loggedIn = false;
-      notifyListeners();
+      //Navigator.pushNamed(context, '/home');
     }
 
-    if (loggedIn) {
-      return 0;
-    } else {
-      return 1;
+  }
+
+  Future login({String name, String password}) async {
+    print("name: " + name + "   pass: " + password);
+
+    int statusCode = 404;
+    if (name.length > 1 && password.length > 1) {
+      statusCode = await client.login(name, password);
+      if (statusCode == 200) {
+        loggedIn = true;
+        notifyListeners();
+      }
     }
+    return statusCode;
   }
 
   Future register({String name, String email, String pass, String pass2}) async {
     print("name: " + name + " email: " + email + " pass: " + pass + " pass2: " + pass2);
+    int statusCode = 404;
 
     if (name.length > 1 &&  email.length > 1 && pass.length > 1 && pass == pass2) {
-      return 0;
-    } else {
-      return 1;
+      int statusCode = await client.register(name: name, email: email, password: pass);
+      if (statusCode == 201) {
+        int loginCode = await login(name: name, password: pass);
+        return loginCode;
+      }
     }
+    return statusCode;
   }
 }

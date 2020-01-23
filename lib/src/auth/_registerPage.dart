@@ -71,8 +71,8 @@ class _RegisterPage extends State<RegisterPage> {
                    onPressed: () async {
                      int code = await model.register(name: myControllerName.text, email: myControllerEmail.text,
                                     pass: myControllerPass.text, pass2: myControllerPass2.text);
-                     if (code == 0) {
-                       Navigator.pushNamed(context, "/login");                       
+                     if (code == 200) {
+                       Navigator.pushNamed(context, "/home");
                      } else {
                        showSnackbar(context, message: "Eins oder mehrere Textfelder leer");
                      }

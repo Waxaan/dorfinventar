@@ -2,6 +2,7 @@ import 'package:Dorfinventar/src/userModel.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:Dorfinventar/src/helpers.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 /*  Login Page
       Nur die Login-Seite der App
@@ -23,6 +24,23 @@ class LoginPage extends StatefulWidget {
 class _LoginPage extends State<LoginPage> {
   final myControllerName = TextEditingController();
   final myControllerPass = TextEditingController();
+
+  /*_init() async{
+
+    final storage = new FlutterSecureStorage();
+    String token = await storage.read(key: 'token');
+
+    if (token != null){
+      Navigator.pushNamed(context, '/home');
+    }
+
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _init();
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +83,8 @@ class _LoginPage extends State<LoginPage> {
               RaisedButton(
                 onPressed: () async {
                   int loginCode = await model.login(name: myControllerName.text,
-                      password: myControllerPass.text);
-                  if (loginCode == 0) { // successful
+                                                    password: myControllerPass.text);
+                  if (loginCode == 200) { // successful
                     Navigator.popAndPushNamed(context, "/home");
                   } else if (loginCode == 1) {
                     showSnackbar(context, message: "Eins oder mehrere Textfelder leer");

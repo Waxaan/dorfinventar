@@ -20,12 +20,14 @@ import 'src/profile/_profilePage.dart';
 import 'src/profile/_alienProfilePage.dart';
 import 'src/userModel.dart';
 import 'src/sensors/_cameraPage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   UserModel userModel = new UserModel();
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return ScopedModel<UserModel>(

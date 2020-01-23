@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /*  Start Page
       Gibt eine kurze Einführung in das Konzept der App
@@ -15,6 +16,23 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPage extends State<StartPage> {
+  /* If StartPage was reached once, automatically go to /home */
+  _init() async{
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool doNotRemind = prefs.getBool('dont_remind');
+      if (doNotRemind != null && doNotRemind){
+        Navigator.pushNamed(context, "/login");
+      }else{
+        prefs.setBool('dont_remind', true);
+      }
+
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _init();
+  }
 
   @override
   Widget build(BuildContext context) {
