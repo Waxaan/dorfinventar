@@ -67,7 +67,7 @@ class _LoginPage extends State<LoginPage> {
                   int loginCode = await model.login(name: myControllerName.text,
                       password: myControllerPass.text);
                   if (loginCode == 0) { // successful
-                    Navigator.pushNamed(context, "/home");
+                    Navigator.popAndPushNamed(context, "/home");
                   } else if (loginCode == 1) {
                     showSnackbar(context, message: "Eines oder mehrere Textfelder leer");
                   } else if (loginCode == 2) {
@@ -86,7 +86,5 @@ class _LoginPage extends State<LoginPage> {
           )
       )
     );
-
   }
-
 }

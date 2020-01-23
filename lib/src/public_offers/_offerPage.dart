@@ -21,7 +21,6 @@ class _OfferPage extends State<OfferPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      drawer: CustomDrawer(),
       body: _settingsWidget(),
     );
   }

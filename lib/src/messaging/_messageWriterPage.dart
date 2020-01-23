@@ -31,7 +31,6 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
       appBar: AppBar(
         title: Text("Chat mit " + widget.username),
       ),
-      drawer: CustomDrawer(),
       body: new Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[

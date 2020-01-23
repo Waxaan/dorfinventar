@@ -21,7 +21,6 @@ class _CategoryPage extends State<CategoryPage> {
             title: Text(widget.title),
           )
       ),
-      drawer: CustomDrawer(),
       body: _categoryWidget(),
     );
   }
