@@ -74,7 +74,7 @@ class _RegisterPage extends State<RegisterPage> {
                      if (code == 0) {
                        Navigator.pushNamed(context, "/login");                       
                      } else {
-                       showSnackbar(context, message: "Eines oder mehrere Textfelder leer");
+                       showSnackbar(context, message: "Eins oder mehrere Textfelder leer");
                      }
                    },
                    child: Text("Registrieren"),

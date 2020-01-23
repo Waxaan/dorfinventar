@@ -65,7 +65,7 @@ class _OfferPage extends State<OfferPage> {
 
   getRandomImage() {
     Random random = new Random();
-    int num = random.nextInt(5);
+    int num = random.nextInt(6);
     if (num == 0) {
       return AssetImage('graphics/arkani.png');
     } else if (num == 1) {
@@ -76,6 +76,8 @@ class _OfferPage extends State<OfferPage> {
       return AssetImage('graphics/cookies.png');
     } else if (num == 4) {
       return AssetImage('graphics/smartphone.png');
+    } else if (num == 5) {
+      return AssetImage('graphics/stossspachtel_1.png');
     } else {
       return AssetImage('400x400_placeholder.png');
     }

@@ -66,7 +66,7 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
       MessageTile(isuser: isuser,
         content: "Ich würde gerne deinen Spachtel ausleihen",),
       MessageTile(isuser: !isuser, content: "Ok, hast du noch irgendwelche Fragen?",),
-      MessageTile(isuser: isuser, content: "Ab wann kann ich den holen? Ist relativ dringent; "
+      MessageTile(isuser: isuser, content: "Ab wann kann ich den holen? Ist relativ dringend; "
             "der Putz ist schon angemischt und wird gleich im Eimer wieder hart",),
       MessageTile(isuser: !isuser, content: "Hmm. Wenns so dringend ist, kannst du gleich vorbei kommen",),
       MessageTile(isuser: isuser, content: "Dann bis gleich",),

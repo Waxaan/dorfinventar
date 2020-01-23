@@ -31,17 +31,6 @@ class _MyOffersPage extends State<MyOffersPage> {
       ),
       drawer: CustomDrawer(),
       body: _settingsWidget(),
-      floatingActionButton: Builder(
-        builder: (context) => FloatingActionButton(
-          child: Text("+", style: TextStyle(fontSize: 48)),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NewOfferPage(title: "Neues Angebot")));
-            items.add(getNewOffer());
-            showSnackbar(context);
-          },
-          ),
-        ),
     );
   }
 

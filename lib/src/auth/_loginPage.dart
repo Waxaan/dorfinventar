@@ -69,7 +69,7 @@ class _LoginPage extends State<LoginPage> {
                   if (loginCode == 0) { // successful
                     Navigator.popAndPushNamed(context, "/home");
                   } else if (loginCode == 1) {
-                    showSnackbar(context, message: "Eines oder mehrere Textfelder leer");
+                    showSnackbar(context, message: "Eins oder mehrere Textfelder leer");
                   } else if (loginCode == 2) {
                     showSnackbar(context, message: "Invalide Logindaten");
                   }
