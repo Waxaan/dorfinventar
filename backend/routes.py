@@ -116,7 +116,7 @@ def update_article():
     db.session.commit()
     return jsonify(article.serialize), 200
 
-@app.route("/api/article/", methods=["POST"])
+@app.route("/api/articles/", methods=["POST"])
 @jwt_required()
 def create_article():
 
@@ -132,11 +132,11 @@ def create_article():
 
     owner = current_identity.username
     
-    if not (name and category and desc and price and owner):
-        return error("Name, description, category, price and owner must be specified"), 401
+    if not (name and category and desc):
+        return error("Name, description and category must be specified"), 401
 
-    if not request.files:
-        return error("Need at least one image to create article"), 401
+    #if not request.files:
+    #    return error("Need at least one image to create article"), 401
 
     img_folder_uuid = uuid.uuid4().hex
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))

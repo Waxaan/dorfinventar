@@ -34,7 +34,7 @@ class CategoryView(ModelView):
 
 class ArticleView(ModelView):
     column_display_pk = True
-    #form_columns = ('id', 'active', 'hidden')
+    column_list = ('id', 'status', 'name', 'desc', 'img_folder', 'owner', 'category')
 
 class ImageView(ModelView):
     column_display_pk = True
