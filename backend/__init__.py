@@ -26,25 +26,30 @@ from backend.models import User, Category, Article, Image, Conversation, Message
 
 class UserView(ModelView):
     column_display_pk = True
+    column_list = ('id', 'username', 'email', 'password')
     #form_columns = ('id', 'status', 'group_id', 'position', 'workers')
 
 class CategoryView(ModelView):
     #column_exclude_list = ('layout')
     column_display_pk = True
+    column_list = ('id', 'name', 'desc')
 
 class ArticleView(ModelView):
     column_display_pk = True
     column_list = ('id', 'status', 'name', 'desc', 'img_folder', 'owner', 'category')
-
+    
 class ImageView(ModelView):
     column_display_pk = True
+    column_list = ('id', 'path', 'item')
 
 class ConversationView(ModelView):
+    column_list = ('id', 'subject', 'user1', 'user2', 'messages')
     column_display_pk = True
 
 class MessageView(ModelView):
     column_display_pk = True
-    form_columns = ('id', 'sender', 'recipient', 'message', 'message_date')
+    column_list = ('id', 'sender', 'recipient', 'message', 'message_date', 'conversation_id')
+    form_columns = ('id', 'sender', 'recipient', 'message', 'message_date', 'conversation_id')
 
 admin.add_view(UserView(User, db.session, 'User'))
 admin.add_view(CategoryView(Category, db.session, 'Category'))
