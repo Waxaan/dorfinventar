@@ -1,0 +1,21 @@
+[
+    {
+        "name": "Outdoor",
+        "desc": "Garten, Dienstleistungen und mehr"
+    },{
+        "name": "Elektronik",
+        "desc": "Handys, Computer, größeres.."
+    },{
+        "name": "Essen",
+        "desc": "Selbstgemachtes oder Überschüssiges"
+    },{
+        "name": "Gemeinschaft",
+        "desc": "Tickets, Treffen oder Fahrten"
+    },{
+        "name": "Jobs",
+        "desc": "Ausbildung, Beruf oder Minijob"
+    },{
+        "name": "Zu Verschenken",
+        "desc": "Alles, was einen neuen Besitzer sucht"
+    }   
+]
