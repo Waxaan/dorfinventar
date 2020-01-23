@@ -40,6 +40,7 @@ class Article(db.Model):
     desc = db.Column(db.String, nullable=False)  
     img_folder = db.Column(db.String, nullable=False)
     owner = db.Column(db.String, db.ForeignKey('user.username'))
+    datetime = db.Column(db.DateTime, nullable=False)
     
     cat_id = db.Column(db.Integer, db.ForeignKey('category.id')) 
     category = db.relationship("Category")

@@ -144,7 +144,7 @@ def create_article():
     img_folder_uuid = uuid.uuid4().hex
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
 
-    article = Article(status='active', name=name, desc=desc, img_folder=img_folder_uuid, owner=owner, category=category_obj)
+    article = Article(status='active', name=name, desc=desc, img_folder=img_folder_uuid, owner=owner, category=category_obj, datetime=datetime.now())
     db.session.add(article)
     db.session.commit()
 
