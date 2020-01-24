@@ -82,15 +82,7 @@ class _LoginPage extends State<LoginPage> {
                 ),),
               RaisedButton(
                 onPressed: () async {
-                  int loginCode = await model.login(name: myControllerName.text,
-                                                    password: myControllerPass.text);
-                  if (loginCode == 200) { // successful
-                    Navigator.popAndPushNamed(context, "/home");
-                  } else if (loginCode == 1) {
-                    showSnackbar(context, message: "Eins oder mehrere Textfelder leer");
-                  } else if (loginCode == 2) {
-                    showSnackbar(context, message: "Invalide Logindaten");
-                  }
+                  model.login(context, name: myControllerName.text, password: myControllerPass.text);
                 },
                   child: Text("Login"),
               ),

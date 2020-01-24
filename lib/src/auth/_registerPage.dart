@@ -68,15 +68,8 @@ class _RegisterPage extends State<RegisterPage> {
                       labelText: "Passwort bestätigen"
                   ),),
                 RaisedButton(
-                   onPressed: () async {
-                     int code = await model.register(name: myControllerName.text, email: myControllerEmail.text,
-                                    pass: myControllerPass.text, pass2: myControllerPass2.text);
-                     if (code == 200) {
-                       Navigator.pushNamed(context, "/home");
-                     } else {
-                       showSnackbar(context, message: "Eins oder mehrere Textfelder leer");
-                     }
-                   },
+                   onPressed: () async => model.register(context, name: myControllerName.text, email: myControllerEmail.text,
+                                                                  pass: myControllerPass.text, pass2: myControllerPass2.text),
                    child: Text("Registrieren"),
                 ),
             ],

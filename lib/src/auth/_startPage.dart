@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../userModel.dart';
 
 /*  Start Page
       Gibt eine kurze Einführung in das Konzept der App
@@ -17,19 +20,19 @@ class StartPage extends StatefulWidget {
 
 class _StartPage extends State<StartPage> {
   /* If StartPage was reached once, automatically go to /home */
-  _init() async{
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool doNotRemind = prefs.getBool('dont_remind');
-      if (doNotRemind != null && doNotRemind){
-        Navigator.pushNamed(context, "/login");
-      }else{
-        prefs.setBool('dont_remind', true);
-      }
+  _init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool doNotRemind = prefs.getBool('dont_remind');
+    if (doNotRemind != null && doNotRemind) {
 
+      Navigator.pushNamed(context, "/login");
+    } else {
+      prefs.setBool('dont_remind', true);
+    }
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _init();
   }
@@ -45,23 +48,29 @@ class _StartPage extends State<StartPage> {
   }
 
   Widget _startPageWidget() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(24.0),
-        child: Column(
-          children: <Widget>[
-            Text(
-                "Willkommen zur Dorfinventar App. \n Hier können Sie bequem "
-                    "mit ihren Nachbarn Artikel verwalten, verkaufen oder teilen."),
-            Spacer(),
-            RaisedButton(
-              onPressed: () => Navigator.pushNamed(context, "/home"),
-              child: Text("Weiter zur App"),
-            )
-          ],
-        ),
-      )
-    );
+    return ScopedModelDescendant <UserModel>(
+        builder: (context, child, model) {
+          return Center(
+              child: Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                        "Willkommen zur Dorfinventar App. \n Hier können Sie bequem "
+                            "mit ihren Nachbarn Artikel verwalten, verkaufen oder teilen."),
+                    Spacer(),
+                    RaisedButton(
+                      onPressed: () async {
+                        if (!await model.loginFromStorage(context)) {
+                          Navigator.pushNamed(context, '/home');
+                        }
+                      },
+                      child: Text("Weiter zur App"),
+                    )
+                  ],
+                ),
+              )
+          );
+        });
   }
-
 }

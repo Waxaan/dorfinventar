@@ -1,40 +1,20 @@
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 class Client {
-
-  final storage = new FlutterSecureStorage();
-  var token;
-
-  setToken(String _token) async {
-    await storage.write(key: 'token', value: _token);
-  }
-
-
-  getToken() async {
-    return await storage.read(key: 'token');
-  }
-
-
   Future login(String name, String password) async {
-    print("ASDASD");
-    print(getToken());
-    token = await getToken();
-    print(token);
     var postBody = new Map<String, dynamic>();
     postBody['username'] = name;
     postBody['password'] = password;
     
-    var ret= await postToServer(postBody: postBody, modifier: "auth/login");
+    var ret = await postToServer(postBody: postBody, modifier: "auth/login");
     var body = ret[0];
     var code = ret[1];
 
-    String temp = "JWT " + body['access_token'].toString();
-    setToken(temp);
+    String newToken = "JWT " + body['access_token'].toString();
     
-    return code;
+    return [code, newToken];
 
   }
   Future register({String name, String email, String password}) async {
