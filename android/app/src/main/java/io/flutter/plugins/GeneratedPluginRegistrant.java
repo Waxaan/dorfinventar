@@ -3,6 +3,7 @@ package io.flutter.plugins;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.camera.CameraPlugin;
 import com.it_nomads.fluttersecurestorage.FlutterSecureStoragePlugin;
+import io.flutter.plugins.imagepicker.ImagePickerPlugin;
 import io.flutter.plugins.sensors.SensorsPlugin;
 import io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin;
 
@@ -16,6 +17,7 @@ public final class GeneratedPluginRegistrant {
     }
     CameraPlugin.registerWith(registry.registrarFor("io.flutter.plugins.camera.CameraPlugin"));
     FlutterSecureStoragePlugin.registerWith(registry.registrarFor("com.it_nomads.fluttersecurestorage.FlutterSecureStoragePlugin"));
+    ImagePickerPlugin.registerWith(registry.registrarFor("io.flutter.plugins.imagepicker.ImagePickerPlugin"));
     SensorsPlugin.registerWith(registry.registrarFor("io.flutter.plugins.sensors.SensorsPlugin"));
     SharedPreferencesPlugin.registerWith(registry.registrarFor("io.flutter.plugins.sharedpreferences.SharedPreferencesPlugin"));
   }

@@ -24,8 +24,7 @@ class _StartPage extends State<StartPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool doNotRemind = prefs.getBool('dont_remind');
     if (doNotRemind != null && doNotRemind) {
-
-      Navigator.pushNamed(context, "/login");
+      Navigator.pushNamed(context, "/home");
     } else {
       prefs.setBool('dont_remind', true);
     }

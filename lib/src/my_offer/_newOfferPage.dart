@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 import '../customDrawer.dart';
 import 'package:http/http.dart';
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../userModel.dart';
 
 class NewOfferPage extends StatefulWidget {
   NewOfferPage({Key key, this.title}) : super(key: key);
@@ -12,14 +18,15 @@ class NewOfferPage extends StatefulWidget {
 }
 
 class _NewOfferPage extends State<NewOfferPage> {
-  var ControllerTitle = TextEditingController();
-  var ControllerDescription = TextEditingController();
+  final controllerTitle = TextEditingController();
+  final controllerDescription = TextEditingController();
+
   @override
   void initState() {
     var _title = "";
     var _description = "";
-    ControllerTitle.text = _title;
-    ControllerDescription.text = _description;
+    controllerTitle.text = _title;
+    controllerDescription.text = _description;
     super.initState();
   }
 
@@ -36,46 +43,56 @@ class _NewOfferPage extends State<NewOfferPage> {
 
 
   Widget _settingsWidget() {
-    return ListView(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: TextField(
-            maxLength: 120,
-            controller: ControllerTitle,
-            decoration: InputDecoration(helperText: "Titel des Inserats"),),
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: GestureDetector(
-            onTap: () => Navigator.pushNamed(context, "/camera"),
-            child: Image(
-              image: AssetImage('graphics/smartphone.png'), height: 250,),
-          )
-        ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: TextField(
-            controller: ControllerDescription,
-            decoration: InputDecoration(
-                helperText: "Beschreibung des Inserats"),
-            keyboardType: TextInputType.multiline,
-            maxLines: null,)
-        ),
-        Center(
-          child: RaisedButton(
-            onPressed: (){
-              send_Input_to_server(ControllerTitle.text, ControllerDescription.text);
-              Navigator.pop(context);
-              },
-            child: Text("Angebot einstellen")
-          )
-        )
-      ]
+    return ScopedModelDescendant <UserModel>(
+        builder: (context, child, model) {
+          return ListView(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                  child: TextField(
+                    maxLength: 120,
+                    controller: controllerTitle,
+                    decoration: InputDecoration(
+                        helperText: "Titel des Inserats"),),
+                ),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: GestureDetector(
+                      onTap: () => pickImage(),
+                      child: Image(
+                        image: AssetImage('graphics/smartphone.png'),
+                        height: 250,),
+                    )
+                ),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    child: TextField(
+                      controller: controllerDescription,
+                      decoration: InputDecoration(
+                          helperText: "Beschreibung des Inserats"),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,)
+                ),
+                Center(
+                    child: RaisedButton(
+                        onPressed: () {
+                          model.postOffer(context, title: controllerTitle.text, description:controllerDescription.text,
+                          price: 10.0, category: "Outdoor");
+                          Navigator.pop(context);
+                        },
+                        child: Text("Angebot einstellen")
+                    )
+                )
+              ]
+          );
+        }
     );
   }
 
-  void send_Input_to_server(String text, String text2) {
+  pickImage() async {
+    File file;
+    print("newOfferPage: picking Image");
+    file = await ImagePicker.pickImage(source: ImageSource.camera);
+  }
 
   }
-}

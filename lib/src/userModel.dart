@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Dorfinventar/src/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -109,6 +111,15 @@ class UserModel extends Model {
     loggedIn = false;
     notifyListeners();
     Navigator.popUntil(context, ModalRoute.withName('/'));
+  }
+
+  postOffer(BuildContext context, {String title, String description, double price, String category, List<File> images}) async {
+    var postBody = new Map<String, dynamic>();
+    postBody['name'] = title;
+    postBody['desc'] = description;
+    postBody['category'] = category;
+    postBody['price'] = price;
+    client.postOfferToServer(modifier: "/api/articles/", postBody: postBody, images: images, token: getToken());
   }
 
 
