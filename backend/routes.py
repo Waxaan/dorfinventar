@@ -191,17 +191,34 @@ def create_article():
     #    return error("Need at least one image to create article"), 401
 
     img_folder_uuid = uuid.uuid4().hex
+    article = Article(status='active', name=name, desc=desc, price=price, images_amount=0, img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
+    
+    db.session.add(article)
+    db.session.commit()
+
+    return jsonify(article.serialize), 201
+
+@app.route("/api/articles/images/<id>", methods=['POST'])
+@jwt_required()
+def upload_images(id):
+
+    article = Article.query.filter(Article.id == id).one_or_none()
+    if not article:
+        return error(f"No article with id {id} found."), 404
+    if not request.files:
+        return error("No attached files found"), 400
+    
+    img_folder_uuid = article.image_folder
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
 
-    article = Article(status='active', name=name, desc=desc, price=price, images_amount=len(request.files), img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
 
     for index, image in enumerate(request.files):
         image = request.files[image]
         if image and allowed_file(image.filename):
             new_filename = "img%s.%s" %(index, "jpg") # secure_filename(image.filename).split(".")[-1]
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid, new_filename))
-
-    db.session.add(article)
+    
+    article.images_amount = len(request.files)
     db.session.commit()
     return jsonify(article.serialize), 201
 
