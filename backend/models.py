@@ -43,7 +43,6 @@ class Article(db.Model):
     img_folder = db.Column(db.String, nullable=False)
     owner = db.Column(db.String, db.ForeignKey('user.username'))
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    
     cat_id = db.Column(db.Integer, db.ForeignKey('category.id')) 
     category = db.relationship("Category")
 
@@ -53,9 +52,12 @@ class Article(db.Model):
             "id": self.id,
             "status": self.status,
             "name": self.name,
+            "price": self.price,
             "description": self.desc,
             "category_id": self.category.id,
-            "category_name": self.category.name
+            "category_name": self.category.name,
+            "owner": self.owner,
+            "pub_date": self.pub_date
         }
 
 class Image(db.Model):
