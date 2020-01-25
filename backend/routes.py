@@ -209,7 +209,7 @@ def upload_images(id):
         return error("No attached files found"), 400
     
     img_folder_uuid = article.img_folder
-    os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
+    os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid), exist_ok=True)
 
     for index, image in enumerate(request.files):
         image = request.files[image]
