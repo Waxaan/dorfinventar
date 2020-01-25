@@ -54,6 +54,7 @@ class Article(db.Model):
             "name": self.name,
             "price": self.price,
             "description": self.desc,
+            "img_amount": self.img_amount,
             "category_id": self.category.id,
             "category_name": self.category.name,
             "owner": self.owner,
