@@ -1,5 +1,5 @@
 from backend import db
-import datetime
+from datetime import datetime
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -37,10 +37,12 @@ class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
+    price = db.Column(db.Integer, nullable=False)
     desc = db.Column(db.String, nullable=False)  
+    img_amount = db.Column(db.Integer, nullable=False)
     img_folder = db.Column(db.String, nullable=False)
     owner = db.Column(db.String, db.ForeignKey('user.username'))
-    datetime = db.Column(db.DateTime, nullable=False)
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     
     cat_id = db.Column(db.Integer, db.ForeignKey('category.id')) 
     category = db.relationship("Category")
@@ -92,7 +94,7 @@ class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     conversation_id = db.Column(db.Integer, db.ForeignKey('conversation.id'))
     message = db.Column(db.String, nullable=False)
-    message_date = db.Column(db.DateTime, nullable=False)
+    pub_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     sender = db.Column(db.String, db.ForeignKey('user.username'), nullable=False)
     recipient = db.Column(db.String, db.ForeignKey('user.username'), nullable=False)
    

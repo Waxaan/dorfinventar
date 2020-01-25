@@ -3,8 +3,8 @@ import uuid
 import pathlib
 
 from passlib.hash import argon2
-from datetime import datetime
-from flask import jsonify, request, Blueprint
+# from datetime import datetime
+from flask import jsonify, request, Blueprint, send_from_directory
 from backend import app, db
 from backend.models import User, Category, Article, Conversation, Message
 from werkzeug.utils import secure_filename
@@ -80,29 +80,47 @@ def get_categories():
 
 @app.route("/api/articles", methods=["GET"])
 def get_articles():
+    print("Getting articles")
     query = Article.query
-    if request.args['name']:
+    if 'name' in request.args:
         query = query.filter(Article.name.ilike("%"+request.args['name']+"%"))
-    if request.args['desc']:
+    if 'desc' in request.args:
         query = query.filter(Article.name.ilike("%"+request.args['desc']+"%"))
-    if request.args['category']:
+    if 'category' in request.args:
         query = query.filter(Article.category.ilike(request.args['category']))
-    if request.args['status']:
+    if 'status' in request.args:
         query = query.filter(Article.status.ilike(request.args['status']))
-
-    query.order_by(desc(Article.datetime)) # always show newest articles at the top
+    query = query.order_by(Article.pub_date.desc()) # always show newest articles at the top
 
     limit = max(request.args.get('limit', 20, int), 0) # prevent negative limits
     if limit:
-        query.limit(limit)
+        query = query.limit(limit)
+    
+    return jsonify([c.serialize for c in query.all()]), 200
 
+# Get one image for the specified article
+@app.route("/api/images/<id>", methods=["GET"])
+def get_image(id):
+    print("Getting image of article with ID")
+    article = Article.query.filter(Article.id == id).one_or_none()
+    if not article:
+        return error(f"No article with {id} found."), 404
 
-    return jsonify([c.serialize for c in query.filter().all()]), 200
+    image_folder = article.image_folder
+    index = 0
+    if "index" in request.args:
+        index = request.args["index"]
+
+    try:
+        return send_from_directory(os.path.join(app.config["UPLOAD_FOLDER"], image_folder), filename = "img%s.jpg" % index, as_attachment=True)
+    except FileNotFoundError:
+        error("File not Found"), 400
+
 
 @app.route("/api/articles/<id>", methods=["GET"])
 def get_article(id):
     article = Article.query.filter(Article.id == id).one_or_none()
-    if not article:
+    if article is None:
         return error(f"No article with {id} found."), 404
     
     return jsonify(article.serialize), 200
@@ -110,6 +128,7 @@ def get_article(id):
 @app.route("/api/articles/<id>", methods=["DELETE"])
 @jwt_required()
 def delete_article(id):
+    print("Deleting article")
     article = Article.query.filter(Article.id == id).one_or_none()
     if not article:
         return error(f"No article with id {id} found."), 404
@@ -124,6 +143,7 @@ def delete_article(id):
 @app.route("/api/articles/", methods=["PUT"])
 @jwt_required()
 def update_article():
+    print("Updating article")
 
     if not request.is_json:
         return error("Expected data to be JSON encoded"), 400
@@ -133,14 +153,14 @@ def update_article():
     article = Article.query.filter(Article.id == id).one_or_none()
     if article is None:
         return error("Article with id %s not found." % id), 404
-    if "name" in request.form:
+    if "name" in request.args:
         article.name = request.form["name"]
-    if "desc" in request.form:
+    if "desc" in request.args:
         article.desc = request.form["desc"]        
-    if "price" in request.form:
+    if "price" in request.args:
         article.price = request.form["price"]        
-    if "status" in request.form:
-        article.status = request.form["status"]
+    if "status" in request.args:
+        article.status = request.args["status"]
 
     db.session.commit()
     return jsonify(article.serialize), 200
@@ -158,7 +178,7 @@ def create_article():
     category = data.get('category', '')
     desc = data.get('desc', '')
     price = data.get('price', 0.0)
-
+    price = int(price * 100)
     owner = current_identity.username
     
     if not (name and category and desc):
@@ -173,16 +193,16 @@ def create_article():
     img_folder_uuid = uuid.uuid4().hex
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
 
-    article = Article(status='active', name=name, desc=desc, img_folder=img_folder_uuid, owner=owner, category=category_obj, datetime=datetime.now())
-    db.session.add(article)
-    db.session.commit()
+    article = Article(status='active', name=name, desc=desc, price=price, images_amount=len(request.files), img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
 
     for index, image in enumerate(request.files):
         image = request.files[image]
         if image and allowed_file(image.filename):
-            new_filename = "img%s.%s" %(index, secure_filename(image.filename).split(".")[-1])
+            new_filename = "img%s.%s" %(index, "jpg") # secure_filename(image.filename).split(".")[-1]
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid, new_filename))
 
+    db.session.add(article)
+    db.session.commit()
     return jsonify(article.serialize), 201
 
 @app.route("/api/chat/messages/", methods=['POST'])
@@ -221,7 +241,7 @@ def send_message():
     # step2.1: falls ja: message zur conversation hinzufügen
     if conv:
         msg_obj = Message(conversation_id=conv.id, message=msg, sender=origin_user_obj.username,\
-                          recipient=other_user_obj.username, message_date=datetime.now())
+                          recipient=other_user_obj.username) #, pub_date=datetime.now()
         db.session.add(msg_obj)    
     # step2.2: falls nein: create conversation, add message to conversation
     else:
@@ -229,7 +249,7 @@ def send_message():
         db.session.add(conv_obj)
         db.session.flush()
         msg_obj = Message(conversation_id=conv_obj.id, message=msg, sender=origin_user_obj.username,\
-                          recipient=other_user_obj.username, message_date=datetime.now())
+                          recipient=other_user_obj.username) #, pub_date=datetime.now()
         db.session.add(msg_obj)
 
     db.session.commit()

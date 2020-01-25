@@ -36,7 +36,7 @@ class CategoryView(ModelView):
 
 class ArticleView(ModelView):
     column_display_pk = True
-    column_list = ('id', 'status', 'name', 'desc', 'img_folder', 'owner', 'category')
+    column_list = ('id', 'status', 'name', 'desc', 'img_folder', 'owner', 'category', 'pub_date')
     
 class ImageView(ModelView):
     column_display_pk = True
@@ -48,8 +48,8 @@ class ConversationView(ModelView):
 
 class MessageView(ModelView):
     column_display_pk = True
-    column_list = ('id', 'sender', 'recipient', 'message', 'message_date', 'conversation_id')
-    form_columns = ('id', 'sender', 'recipient', 'message', 'message_date', 'conversation_id')
+    column_list = ('id', 'sender', 'recipient', 'message', 'pub_date', 'conversation_id')
+    form_columns = ('id', 'sender', 'recipient', 'message', 'pub_date', 'conversation_id')
 
 admin.add_view(UserView(User, db.session, 'User'))
 admin.add_view(CategoryView(Category, db.session, 'Category'))
