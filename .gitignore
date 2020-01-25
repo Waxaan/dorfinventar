@@ -8,3 +8,4 @@ test/
 .vscode
 venv
 __pycache__/
+backend/file_storage
