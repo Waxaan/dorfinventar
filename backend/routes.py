@@ -105,16 +105,15 @@ def get_image(id):
     article = Article.query.filter(Article.id == id).one_or_none()
     if not article:
         return error(f"No article with {id} found."), 404
-
+    
     image_folder = article.img_folder
     index = 0
     if "index" in request.args:
         index = request.args["index"]
-
     try:
         return send_from_directory(os.path.join(app.config["UPLOAD_FOLDER"], image_folder), filename = "img%s.jpg" % index, as_attachment=True)
     except FileNotFoundError:
-        error("File not Found"), 400
+        error("File not Found"), 404
 
 
 @app.route("/api/articles/<id>", methods=["GET"])
@@ -191,7 +190,7 @@ def create_article():
     #    return error("Need at least one image to create article"), 401
 
     img_folder_uuid = uuid.uuid4().hex
-    article = Article(status='active', name=name, desc=desc, price=price, images_amount=0, img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
+    article = Article(status='active', name=name, desc=desc, price=price, img_amount=0, img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
     
     db.session.add(article)
     db.session.commit()
@@ -210,14 +209,13 @@ def upload_images(id):
     
     img_folder_uuid = article.img_folder
     os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid), exist_ok=True)
-
-    for index, image in enumerate(request.files):
-        image = request.files[image]
+    files = request.files.getlist("files")
+    for index, image in enumerate(files):
         if image and allowed_file(image.filename):
             new_filename = "img%s.%s" %(index, "jpg") # secure_filename(image.filename).split(".")[-1]
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid, new_filename))
     
-    article.img_amount = len(request.files)
+    article.img_amount = len(files)
     db.session.commit()
     return jsonify(article.serialize), 201
 

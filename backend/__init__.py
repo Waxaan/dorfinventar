@@ -3,17 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from datetime import timedelta
+import os
 
-UPLOAD_FOLDER = 'backend/file_storage/images/'
-
-app = Flask(__name__)
+app = Flask(__name__, static_folder='file_storage')
+UPLOAD_FOLDER = os.path.join(app.static_folder, 'images')
 app.config['SECRET_KEY'] = 'f03b64dca19c7e6e86b419e8c3abf4db'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dorfinv.db'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024 # 4 MB UploadSize Limit
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(days=30)
 app.config['JWT_AUTH_URL_RULE'] = "/api/auth/login" # url to get jwt token
-
 db = SQLAlchemy(app)
 
 
