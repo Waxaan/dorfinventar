@@ -78,7 +78,7 @@ def register():
 def get_categories():
     return jsonify([c.serialize for c in Category.query.all()]), 200
 
-@app.route("/api/articles", methods=["GET"])
+@app.route("/api/articles/", methods=["GET"])
 def get_articles():
     print("Getting articles")
     query = Article.query
@@ -193,7 +193,7 @@ def create_article():
     img_folder_uuid = uuid.uuid4().hex
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
 
-    article = Article(status='active', name=name, desc=desc, price=price, images_amount=len(request.files), img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
+    article = Article(status='active', name=name, desc=desc, price=price, img_amount=len(request.files), img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
 
     for index, image in enumerate(request.files):
         image = request.files[image]
