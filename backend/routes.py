@@ -78,7 +78,7 @@ def register():
 def get_categories():
     return jsonify([c.serialize for c in Category.query.all()]), 200
 
-@app.route("/api/articles/", methods=["GET"])
+@app.route("/api/articles", methods=["GET"])
 def get_articles():
     query = Article.query
     if request.args['name']:
@@ -90,7 +90,36 @@ def get_articles():
     if request.args['status']:
         query = query.filter(Article.status.ilike(request.args['status']))
 
+    query.order_by(desc(Article.datetime)) # always show newest articles at the top
+
+    limit = max(request.args.get('limit', 20, int), 0) # prevent negative limits
+    if limit:
+        query.limit(limit)
+
+
     return jsonify([c.serialize for c in query.filter().all()]), 200
+
+@app.route("/api/articles/<id>", methods=["GET"])
+def get_article(id):
+    article = Article.query.filter(Article.id == id).one_or_none()
+    if not article:
+        return error(f"No article with {id} found."), 404
+    
+    return jsonify(article.serialize), 200
+
+@app.route("/api/articles/<id>", methods=["DELETE"])
+@jwt_required()
+def delete_article(id):
+    article = Article.query.filter(Article.id == id).one_or_none()
+    if not article:
+        return error(f"No article with id {id} found."), 404
+
+    if article.owner != current_identity.username:
+        return error(f"Only owners can delete their articles."), 401
+    
+    db.session.delete(article)
+    db.session.commit()
+    return "Deleted article succesfully.", 200
 
 @app.route("/api/articles/", methods=["PUT"])
 @jwt_required()
