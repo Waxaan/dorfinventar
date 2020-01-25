@@ -54,6 +54,7 @@ class _RegisterPage extends State<RegisterPage> {
                 ),),
                 TextFormField(
                   controller: myControllerEmail,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: "E-Mail"
                 ),),

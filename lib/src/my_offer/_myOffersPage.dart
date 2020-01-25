@@ -15,34 +15,40 @@ class MyOffersPage extends StatefulWidget {
 }
 
 class _MyOffersPage extends State<MyOffersPage> {
-  @override
   List<Widget> items = new List<Widget>();
-
-  void initState() {
-    super.initState();
-    items.addAll(getPrivateOffers());
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      drawer: CustomDrawer(),
-      body: _settingsWidget(),
-    );
-  }
-
-
-  Widget _settingsWidget() {
-    return Center(
-      child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return items[index];
-          },
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
+        drawer: CustomDrawer(),
+        body: ScopedModelDescendant<UserModel>(
+            builder: (context, child, model) {
+              return Column(
+                  children: [
+                    getListOfOffers(model),
+                    GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, "/newOffer");
+                          model.resetLastOffer();
+                        },
+                        child: Card(
+                            color: Colors.green,
+                            child: ListTile(
+                              title: Center(
+                                  child: Text("+",
+                                    style: TextStyle(fontSize: 48),
+                                  )
+                              ),
+                            )
+                        )
+                    )
+                  ]
+              );
+            }
+        )
     );
   }
 
@@ -53,40 +59,41 @@ class _MyOffersPage extends State<MyOffersPage> {
   }
 
   showSnackbar(BuildContext context) {
-    Scaffold.of(context).showSnackBar(
-        SnackBar(content: Text("Inserat wurde hinzugefügt")));
+    Scaffold.of(context)
+        .showSnackBar(SnackBar(content: Text("Inserat wurde hinzugefügt")));
   }
 
   PrivateOfferCard getNewOffer() {
     Random random = new Random();
     List<PrivateOfferCard> items = <PrivateOfferCard>[];
     items.add(PrivateOfferCard(
-        name: "TODO: Günstiges Produkt", description: "TODO: Sample Beschreibung", price: random.nextDouble()*10));
+        name: "TODO: Günstiges Produkt",
+        description: "TODO: Sample Beschreibung",
+        price: random.nextDouble() * 10));
     items.add(PrivateOfferCard(
-        name: "TODO: Normales Produkt", description: "TODO: Sample Beschreibung", price: 5+random.nextDouble()*50));
+        name: "TODO: Normales Produkt",
+        description: "TODO: Sample Beschreibung",
+        price: 5 + random.nextDouble() * 50));
     items.add(PrivateOfferCard(
-        name: "TODO: Luxus Produktname", description: "TODO: Sample Beschreibung", price: 50+random.nextDouble()*200));
+        name: "TODO: Luxus Produktname",
+        description: "TODO: Sample Beschreibung",
+        price: 50 + random.nextDouble() * 200));
     return items[random.nextInt(3)];
   }
 
-  List<Widget> getPrivateOffers() {
-    List<Widget> offers = new List<Widget>();
-    offers.add(GestureDetector(
-        onTap: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => NewOfferPage(title: "Neues Angebot")));
-          items.add(getNewOffer());
-          showSnackbar(context);
-        },
-        child: Card(
-          color: Colors.green,
-            child: ListTile(
-              title: Center(
-                  child: Text("+", style: TextStyle(fontSize: 48),)
-              ),
-            )
+
+  getListOfOffers(UserModel model) {
+    List<Widget> offers = model.getMyOffers();
+    if (offers == null) {
+      return Container(width: 0, height: 0);
+    }
+    return Expanded(
+        child: ListView.builder(
+          itemCount: offers.length,
+          itemBuilder: (context, index) {
+            return offers[index];
+          },
         )
-    ));
-    return offers;
+    );
   }
 }

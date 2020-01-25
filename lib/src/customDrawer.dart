@@ -92,7 +92,7 @@ class CustomDrawer extends Drawer {
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("Anmelden"),
-              onTap: () => Navigator.pushNamed(context, "/login"),
+              onTap: () => model.loginFromStorage(context),
             ),
             Divider(),
             ListTile(

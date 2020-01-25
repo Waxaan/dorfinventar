@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 import 'dart:io';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -33,7 +34,6 @@ class Client {
   }
 
 
-
   Future postAuthToServer({Map<String, dynamic> postBody, String modifier}) async {
     String url = 'http://mobint-projekt.hci.uni-hannover.de/api/' + modifier;
     var jsonBody = convert.json.encode(postBody);
@@ -57,8 +57,9 @@ class Client {
                   "Authorization": token.toString()},
         body: jsonBody
     );
+    int statusCode = response.statusCode;
 
-    File image = images[0];
+    /*File image = images[0];
     var request = http.MultipartRequest("POST", Uri.parse(url));
     //request.fields["text_field"] = text;
     var pic = await http.MultipartFile.fromPath("file_field", image.path);
@@ -71,8 +72,12 @@ class Client {
     var responseString = String.fromCharCodes(responseData);
     print(responseString);
 
-    int statusCode = response.statusCode;
+    int statusCode = response.statusCode; */
     return [convert.jsonDecode(response.body), statusCode];
+  }
+
+  List<Widget> getMyOffersFromServer(token) {
+
   }
 
 }

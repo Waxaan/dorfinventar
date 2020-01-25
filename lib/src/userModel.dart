@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:Dorfinventar/src/helpers.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'httpClient.dart';
@@ -12,9 +13,15 @@ class UserModel extends Model {
   Client client = new Client();
   bool loggedIn = false;
   bool get loginStatus => loggedIn;
+  List<File> images = new List<File>();
 
   setToken(String _token) async => await storage.write(key: 'token', value: _token);
   getToken() async => await storage.read(key: 'token');
+
+
+  void resetLastOffer() {
+    images = new List<File>();
+  }
 
   /// Main Login Function
   /// IF a token was already saved to secure storage, use it
@@ -103,6 +110,8 @@ class UserModel extends Model {
       showSnackbar(context, message: "Login Erfolgreich.");
       return true;
     }
+    Navigator.pushNamed(context, '/login');
+    showSnackbar(context, message: "Automatisch Angemeldet.");
     return false;
   }
 
@@ -113,14 +122,42 @@ class UserModel extends Model {
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
-  postOffer(BuildContext context, {String title, String description, double price, String category, List<File> images}) async {
+  postOffer(BuildContext context, {String title, String description, double price, String category}) async {
     var postBody = new Map<String, dynamic>();
     postBody['name'] = title;
     postBody['desc'] = description;
     postBody['category'] = category;
     postBody['price'] = price;
-    client.postOfferToServer(modifier: "/api/articles/", postBody: postBody, images: images, token: getToken());
+    client.postOfferToServer(modifier: "/api/articles/", postBody: postBody, images: this.images, token: getToken());
   }
+
+  addImage(BuildContext context, File image) {
+    if (image != null) this.images.add(image);
+    notifyListeners();
+  }
+
+  getImagesLength() {
+    if (this.images == null) return 0;
+    else return this.images.length;
+  }
+
+  getImage(int i, double width, double height) {
+    if (i == getImagesLength())
+      return Center(child: Icon(Icons.photo_camera, size: width/3,));
+    else return Stack(
+      children: [
+        Image.file(images[i], width: width, height: height, fit: BoxFit.fill),
+        Center(
+            child: Text('Bild $i',style: TextStyle(fontSize: 16.0),)
+        )]);
+  }
+
+
+  List<Widget> getMyOffers() {
+    return client.getMyOffersFromServer(this.getToken());
+  }
+
+
 
 
 }
