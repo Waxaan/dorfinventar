@@ -217,7 +217,7 @@ def upload_images(id):
             new_filename = "img%s.%s" %(index, "jpg") # secure_filename(image.filename).split(".")[-1]
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid, new_filename))
     
-    article.images_amount = len(request.files)
+    article.img_amount = len(request.files)
     db.session.commit()
     return jsonify(article.serialize), 201
 
