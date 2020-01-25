@@ -191,7 +191,7 @@ def create_article():
     #    return error("Need at least one image to create article"), 401
 
     img_folder_uuid = uuid.uuid4().hex
-    article = Article(status='active', name=name, desc=desc, price=price, images_amount=0, img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
+    article = Article(status='active', name=name, desc=desc, price=price, img_amount=0, img_folder=img_folder_uuid, owner=owner, category=category_obj) # , pub_date=datetime.now()
     
     db.session.add(article)
     db.session.commit()
