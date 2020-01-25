@@ -78,7 +78,7 @@ def register():
 def get_categories():
     return jsonify([c.serialize for c in Category.query.all()]), 200
 
-@app.route("/api/articles", methods=["GET"])
+@app.route("/api/articles/", methods=["GET"])
 def get_articles():
     print("Getting articles")
     query = Article.query
@@ -210,7 +210,6 @@ def upload_images(id):
     
     img_folder_uuid = article.image_folder
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
-
 
     for index, image in enumerate(request.files):
         image = request.files[image]
