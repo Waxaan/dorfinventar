@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../customDrawer.dart';
-import 'package:http/http.dart';
-import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
@@ -24,8 +22,9 @@ class _NewOfferPage extends State<NewOfferPage> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
   final controllerPrice = MoneyMaskedTextController(
-      decimalSeparator: ',', thousandSeparator: '.', rightSymbol: "€");
+      decimalSeparator: '.', thousandSeparator: '.', rightSymbol: "€");
   bool itemIsAvailable = true;
+  var _category = "Sonstiges";
 
   @override
   void initState() {
@@ -112,7 +111,7 @@ class _NewOfferPage extends State<NewOfferPage> {
                         child: new Text(value),
                       );
                     }).toList(),
-                    onChanged: (_) {}),
+                    onChanged: (String category) => _category = category),
                 Checkbox(
                   onChanged: (bool b) => {
                     setState(() {
@@ -141,8 +140,9 @@ class _NewOfferPage extends State<NewOfferPage> {
                   model.postOffer(context,
                       title: controllerTitle.text,
                       description: controllerDescription.text,
-                      price: 10.0,
-                      category: "Outdoor");
+                      price: (double.parse(controllerPrice.text.substring(0, controllerPrice.text.length-1))*100).toInt(),
+                      category: _category,
+                      available: itemIsAvailable);
                   Navigator.pop(context);
                 },
                 child: Text("Angebot einstellen")))

@@ -122,13 +122,18 @@ class UserModel extends Model {
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
-  postOffer(BuildContext context, {String title, String description, double price, String category}) async {
+  postOffer(BuildContext context, {String title, String description, int price, String category, bool available}) async {
     var postBody = new Map<String, dynamic>();
     postBody['name'] = title;
     postBody['desc'] = description;
-    postBody['category'] = category;
+    postBody['category'] = 1;
     postBody['price'] = price;
-    client.postOfferToServer(modifier: "/api/articles/", postBody: postBody, images: this.images, token: getToken());
+    postBody['available'] = available;
+    client.postOfferToServer(modifier: "articles/", postBody: postBody, images: this.images, token: await getToken());
+    int index = 0;
+    for (File image in images) {
+      client.uploadFile(image, index++);
+    }
   }
 
   addImage(BuildContext context, File image) {
@@ -153,8 +158,10 @@ class UserModel extends Model {
   }
 
 
+
+
   List<Widget> getMyOffers() {
-    return client.getMyOffersFromServer(this.getToken());
+    return null; //client.getMyOffersFromServer(this.getToken());
   }
 
 
