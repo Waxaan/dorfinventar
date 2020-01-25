@@ -106,7 +106,7 @@ def get_image(id):
     if not article:
         return error(f"No article with {id} found."), 404
 
-    image_folder = article.image_folder
+    image_folder = article.img_folder
     index = 0
     if "index" in request.args:
         index = request.args["index"]
@@ -208,7 +208,7 @@ def upload_images(id):
     if not request.files:
         return error("No attached files found"), 400
     
-    img_folder_uuid = article.image_folder
+    img_folder_uuid = article.img_folder
     os.mkdir(os.path.join(app.config['UPLOAD_FOLDER'], img_folder_uuid))
 
     for index, image in enumerate(request.files):
