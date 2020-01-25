@@ -82,6 +82,8 @@ def get_categories():
 def get_articles():
     print("Getting articles")
     query = Article.query
+    if 'owner' in request.args:
+        query = query.filter(Article.owner == current_identity.username)
     if 'name' in request.args:
         query = query.filter(Article.name.ilike("%"+request.args['name']+"%"))
     if 'desc' in request.args:
