@@ -141,27 +141,34 @@ def delete_article(id):
     db.session.commit()
     return "Deleted article succesfully.", 200
 
-@app.route("/api/articles/", methods=["PUT"])
+@app.route("/api/articles/<id>", methods=["PUT"])
 @jwt_required()
-def update_article():
+def update_article(id):
     print("Updating article")
 
     if not request.is_json:
         return error("Expected data to be JSON encoded"), 400
     
-    _id = request.get_json().get('id', -1)
+    data = request.get_json()
 
     article = Article.query.filter(Article.id == id).one_or_none()
     if article is None:
         return error("Article with id %s not found." % id), 404
-    if "name" in request.args:
-        article.name = request.form["name"]
-    if "desc" in request.args:
-        article.desc = request.form["desc"]        
-    if "price" in request.args:
-        article.price = request.form["price"]        
-    if "status" in request.args:
-        article.status = request.args["status"]
+    if article.owner != current_identity.username:
+        return error("Only the owner of article with id %s can update it." % id), 404
+    if data.get("name"):
+        article.name = data.get("name")
+    if data.get("desc"):
+        article.desc = data.get("desc")
+    
+    price = data.get("price")
+    if price and int(price) < 0:
+        return error("No negative prices allowed"), 401
+    else:
+        article.price = price
+
+    if data.get("status"):
+        article.status = data.get("status")
 
     db.session.commit()
     return jsonify(article.serialize), 200
@@ -184,6 +191,9 @@ def create_article():
     
     if not (name and category and desc):
         return error("Name, description and category must be specified"), 401
+
+    if price < 0:
+        return error("No negative prices allowed"), 401
 
     category_obj = Category.query.filter(Category.id == category).one_or_none()
     if category_obj is None:
