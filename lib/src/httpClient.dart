@@ -63,28 +63,16 @@ class Client {
     int statusCode = response.statusCode;
     print(response.body);
     print(statusCode);
-    /*File image = images[0];
-    var request = http.MultipartRequest("POST", Uri.parse(url));
-    //request.fields["text_field"] = text;
-    var pic = await http.MultipartFile.fromPath("file_field", image.path);
-
-    request.files.add(pic);
-    var response = await request.send();
-
-    //Get the response from the server
-    var responseData = await response.stream.toBytes();
-    var responseString = String.fromCharCodes(responseData);
-    print(responseString);
-
-    int statusCode = response.statusCode; */
     return [convert.jsonDecode(response.body), statusCode];
   }
 
-  uploadFile(File image, int i) async {
-    print("httpClient: Uploading image $i");
-    var postUri = Uri.parse("http://mobint-projekt.hci.uni-hannover.de/api/" + "images/$i");
+  uploadFile(File image, int articleID, String token) async {
+    print("httpClient: Uploading image $articleID");
+    var postUri = Uri.parse("http://mobint-projekt.hci.uni-hannover.de/api/" + "images/" + articleID.toString());
     var request = new http.MultipartRequest("POST", postUri);
-    request.fields['user'] = 'blah';
+    request.headers.addAll({"Content-Type": "application/json",
+                            "Authorization": token.toString()});
+    request.fields['user'] = token.toString();
       request.files.add(
           new http.MultipartFile.fromBytes('file',
               await File.fromUri(image.uri).readAsBytes(),
@@ -92,19 +80,24 @@ class Client {
 
     request.send().then((response) {
       if (response.statusCode == 200) print("Uploaded!");
-      print(response.statusCode);
-      print(response.toString());
+      print("Fileupload: Statuscode: " + response.statusCode.toString());
+      print("Filupload Response: " + response.headers.toString());
     });
   }
 
   Future getMyOffersFromServer(token) async {
-   /* var postBody = new Map<String, dynamic>();
-    var ret = await postAuthToServer(postBody: postBody, modifier: "auth/register");
-    var body = ret[0];
-    var code = ret[1];
+    String url = 'http://mobint-projekt.hci.uni-hannover.de/api/' + "articles/";
 
-    return code;
- */
+    print("httpClient: getMyOffersFromServer: Posting to $url");
+    var response = await http.get(url,
+        headers: {"Content-Type": "application/json",
+          "Authorization": token.toString(),
+          "owner": "neueruser"},
+    );
+    int statusCode = response.statusCode;
+    print("getMyOffersFromServer: Code: " + statusCode.toString());
+
+    return convert.jsonDecode(response.body);
   }
 
 

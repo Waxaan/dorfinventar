@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:Dorfinventar/src/public_offers/publicOfferCard.dart';
+
 import 'httpClient.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -132,7 +134,7 @@ class UserModel extends Model {
     client.postOfferToServer(modifier: "articles/", postBody: postBody, images: this.images, token: await getToken());
     int index = 0;
     for (File image in images) {
-      client.uploadFile(image, index++);
+      client.uploadFile(image, index++, await getToken());
     }
   }
 
@@ -149,19 +151,25 @@ class UserModel extends Model {
   getImage(int i, double width, double height) {
     if (i == getImagesLength())
       return Center(child: Icon(Icons.photo_camera, size: width/3,));
-    else return Stack(
-      children: [
-        Image.file(images[i], width: width, height: height, fit: BoxFit.fill),
-        Center(
-            child: Text('Bild $i',style: TextStyle(fontSize: 16.0),)
-        )]);
+    else
+      return Center(child: Image.file(images[i], width: width, height: height, fit: BoxFit.fitWidth));
   }
 
 
 
 
-  List<Widget> getMyOffers() {
-    return null; //client.getMyOffersFromServer(this.getToken());
+  Future getMyOffers() async {
+    return await client.getMyOffersFromServer(this.getToken());
+ /*     final List<dynamic> myResponse= json.decode(response.body);
+
+      return await client.getMyOffersFromServer(this.getToken()).then((List<dynamic> ret) (() {
+
+    });
+    for (var offer in ret) {
+      print(offer.toString());
+      offers.add(new PublicOfferCard(price: offer['price'], name: offer['name'], description: offer['description'],price: offer['price'], name: offer['name'], description: offer['description'],));
+    }
+    return ret; */
   }
 
 

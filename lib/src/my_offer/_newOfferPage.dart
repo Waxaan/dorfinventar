@@ -24,7 +24,7 @@ class _NewOfferPage extends State<NewOfferPage> {
   final controllerPrice = MoneyMaskedTextController(
       decimalSeparator: '.', thousandSeparator: '.', rightSymbol: "€");
   bool itemIsAvailable = true;
-  var _category = "Sonstiges";
+  var _category = "Kategorie";
 
   @override
   void initState() {
@@ -103,7 +103,7 @@ class _NewOfferPage extends State<NewOfferPage> {
                                   borderRadius: BorderRadius.circular(2.0))),
                         ))),
                 new DropdownButton<String>(
-                    hint: Text("Kategorie"),
+                    hint: Text(_category),
                     items: <String>['Outdoor', 'Elektronik', 'Umbau', 'Essen']
                         .map((String value) {
                       return new DropdownMenuItem<String>(
@@ -154,7 +154,7 @@ class _NewOfferPage extends State<NewOfferPage> {
     print("CarouselSliderClick on index " + i.toString());
     File file;
     print("newOfferPage: picking Image");
-    file = await ImagePicker.pickImage(source: ImageSource.camera);
+    file = await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 690, maxHeight: 690);
     if (file != null) print("newOfferPage: Image successfully picked");
     return file;
   }
@@ -163,8 +163,3 @@ class _NewOfferPage extends State<NewOfferPage> {
     itemIsAvailable = !itemIsAvailable;
   }
 }
-
-/**
-
-
- **/

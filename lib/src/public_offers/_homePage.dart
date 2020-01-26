@@ -73,12 +73,12 @@ class _HomePage extends State<HomePage> {
   List<Widget> getNewOffers() {
     List<Widget> items = new List<Widget>();
     items.add(PublicOfferCard(
-      name: "Gartenschere", description: "So gut wie neu", price: 30.0,));
+      name: "Gartenschere", description: "So gut wie neu", price: 3000,));
     items.add(PublicOfferCard(
       name: "Baum fällen", description: "Ich untersütze sie beim Fällen eines Baumes, "
         "Preis bitte per Nachricht", price: 0,));
     items.add(PublicOfferCard(
-      name: "Omas Käsekuchen", description: "Der beste im ganzen Dorf", price: 10.0,));
+      name: "Omas Käsekuchen", description: "Der beste im ganzen Dorf", price: 1000,));
     return items;
   }
 
@@ -86,13 +86,13 @@ class _HomePage extends State<HomePage> {
     List<Widget> items = new List<Widget>();
     items.add(PublicOfferCard(name: "Mediteraner Kochkurs",
       description: "Bitte über Nachricht anmelden und Lebensmittel selbst mirnehmen.",
-      price: 1.0,));
+      price: 100,));
     items.add(PublicOfferCard(name: "Vergaserinnenbeleuchtung", description: "Weitere Produkte im Sortiment: "
-        "Getriebesand, Kolbenrückholfedern, Keilriemenfett", price: 25.0,),);
-    items.add(PublicOfferCard(name: "Kindergeburtstag", description: "Wir richten für Ihr Kind einen unvergesslichen Geburtstag aus!", price: 10.0,),);
+        "Getriebesand, Kolbenrückholfedern, Keilriemenfett", price: 2500,),);
+    items.add(PublicOfferCard(name: "Kindergeburtstag", description: "Wir richten für Ihr Kind einen unvergesslichen Geburtstag aus!", price: 1000,),);
     items.add(PublicOfferCard(name: "Klausurlöung Elektrotechnik", description: "Für die Informatiker, "
-        "die einfach nicht wollen", price: 100.0,),);
-    items.add(PublicOfferCard(name: "Spachtel", description: "Noch fast unbenutzt", price: 6.00),);
+        "die einfach nicht wollen", price: 10000,),);
+    items.add(PublicOfferCard(name: "Spachtel", description: "Noch fast unbenutzt", price: 6000),);
     return items;
   }
 }

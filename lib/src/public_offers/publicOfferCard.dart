@@ -7,7 +7,7 @@ class PublicOfferCard extends Card {
   PublicOfferCard({Key key, this.name, this.description, this.price, this.articleID}) : super(key: key);
   final String name;
   final String description;
-  final double price;
+  final int price;
   final String articleID;
 
 
@@ -70,7 +70,7 @@ class PublicOfferCard extends Card {
 }
 
 
-String getPriceString(double price) {
+String getPriceString(int price) {
   if(price == 0)
     return "Gratis";
   return price.toStringAsFixed(2) + "€";
