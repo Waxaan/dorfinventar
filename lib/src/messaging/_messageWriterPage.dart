@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:Dorfinventar/src/customDrawer.dart';
 import 'package:Dorfinventar/src/messaging/messageTile.dart';
 import 'package:Dorfinventar/src/helpers.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../userModel.dart';
 
 
 class MessagesWriterPage extends StatefulWidget {
@@ -31,29 +34,64 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
       appBar: AppBar(
         title: Text("Chat mit " + widget.username),
       ),
-      body: new Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return items[index];
-            },
-            )
-          ),
-          Card(
-            child: ListTile(
-              title: TextField(),
-              trailing: FlatButton(
-                onPressed: () => showSnackbar(context, message: "Nachricht gesendet"),
-                child: Icon(Icons.send)
+      body: ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+        return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              FutureBuilder(
+                  future: model.getOffers(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Expanded(
+                          child: ListView.builder(
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                return MessageTile(isuser: true,
+                                    content: "Ich würde gerne deinen Spachtel ausleihen",
+                                );
+                              }
+                          )
+                      );
+                    } else {
+                      return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              child: CircularProgressIndicator(),
+                              width: 60,
+                              height: 60,
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: Text('Awaiting result...'),
+                            )
+                          ]);
+                    }
+                  }),
+              Expanded(
+                child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return items[index];
+                },
+                )
+              ),
+              Card(
+                child: ListTile(
+                  title: TextField(),
+                  trailing: FlatButton(
+                    onPressed: () async {
+                      //model.sendMessage();
+                      showSnackbar(context, message: "Nachricht gesendet");
+                    },
+                    child: Icon(Icons.send)
+                  )
+                )
               )
-            )
-          )
-        ],
-      ),
-    );
+            ],
+          );})
+        );
   }
 
 

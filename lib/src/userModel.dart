@@ -18,7 +18,10 @@ class UserModel extends Model {
   List<File> images = new List<File>();
 
   setToken(String _token) async => await storage.write(key: 'token', value: _token);
+  setUsername(String _username) async => await storage.write(key: 'username', value: _username);
+
   getToken() async => await storage.read(key: 'token');
+  getUsername() async => await storage.read(key: 'username');
 
 
   void resetLastOffer() {
@@ -32,7 +35,7 @@ class UserModel extends Model {
     var ret = await logMeIn(context, name: name, password: password);
     var statusCode = ret[0];
     var newToken = ret[1];
-    print(newToken);
+    print("Model: Logintoken: " + newToken.toString());
     if (statusCode == 200 && newToken != null) {
       loggedIn = true;
       notifyListeners();
@@ -63,6 +66,7 @@ class UserModel extends Model {
       loggedIn = true;
       notifyListeners();
       setToken(newToken);
+      setUsername(name);
       Navigator.popAndPushNamed(context, "/home");
     }
     print("usermodel: Login statuscode: " + statusCode.toString());
@@ -156,11 +160,16 @@ class UserModel extends Model {
   }
 
 
+  Future getOffers({bool user, String owner, String category, String id, String description, String name, String status}) async {
+    if (user) return await client.getOffersFromServer(await this.getToken(), user: await this.getUsername(), name: name, category: category, status: status);
+    else return await client.getOffersFromServer(this.getToken(), name: name, category: category, status: status);
+  }
 
 
-  Future getMyOffers() async {
+
+/* Future getMyOffers() async {
     return await client.getMyOffersFromServer(this.getToken());
- /*     final List<dynamic> myResponse= json.decode(response.body);
+      final List<dynamic> myResponse= json.decode(response.body);
 
       return await client.getMyOffersFromServer(this.getToken()).then((List<dynamic> ret) (() {
 
@@ -169,10 +178,10 @@ class UserModel extends Model {
       print(offer.toString());
       offers.add(new PublicOfferCard(price: offer['price'], name: offer['name'], description: offer['description'],price: offer['price'], name: offer['name'], description: offer['description'],));
     }
-    return ret; */
+    return ret;
+  }*/
+
+  void sendMessage() {
+    client.postMessageToServer();
   }
-
-
-
-
 }

@@ -85,20 +85,52 @@ class Client {
     });
   }
 
-  Future getMyOffersFromServer(token) async {
+  Future getOffersFromServer(token, {String user, String category, String name, String status}) async {
     String url = 'http://mobint-projekt.hci.uni-hannover.de/api/' + "articles/";
 
-    print("httpClient: getMyOffersFromServer: Posting to $url");
-    var response = await http.get(url,
-        headers: {"Content-Type": "application/json",
-          "Authorization": token.toString(),
-          "owner": "neueruser"},
-    );
+    Map<String, dynamic> header = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    header['Authorization'] = token.toString();
+    String args = "?";
+    if (user != null) args += "owner=$user&";
+    if (name != null) args += "name=$name&";
+    if (category != null) args += "category=$category&";
+    if (status != null) args += "status=$status";
+
+    print("httpClient: getOffersFromServer: Posting to $url");
+    var response = await http.get(url + args, headers:
+      {"Content-Type": "application/json",
+      "Authorization": token.toString(),
+    });
     int statusCode = response.statusCode;
-    print("getMyOffersFromServer: Code: " + statusCode.toString());
+    print("getOffersFromServer: Code: " + statusCode.toString());
 
     return convert.jsonDecode(response.body);
   }
+
+  Future postMessageToServer({Map<String, dynamic> postBody, String token, String modifier, List<File> images}) async {
+    /*String url = 'http://mobint-projekt.hci.uni-hannover.de/api/' + "chat/messages/";
+    var postBody = new Map<String, dynamic>();
+    postBody['message'] = name;
+    postBody['subject'] = email;
+    postBody['username'] = "";
+    postBody['user2'] =
+    var jsonBody = convert.json.encode(postBody);
+
+    print("httpClient: Posting to $url");
+    print(jsonBody);
+    var response = await http.post(url,
+        headers: {"Content-Type": "application/json",
+          "Authorization": token.toString()},
+        body: jsonBody
+    );
+    int statusCode = response.statusCode;
+    print(response.body);
+    print(statusCode);
+    return [convert.jsonDecode(response.body), statusCode]; */
+  }
+
+
 
 
  /* Future postAuthToServer({Map<String, dynamic> postBody, String modifier}) async {

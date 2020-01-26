@@ -5,7 +5,7 @@ import '../customDrawer.dart';
 
 class OfferPage extends StatefulWidget {
 
-  OfferPage({Key key, this.title, this.description}) : super(key: key);
+  OfferPage({Key key, this.title, this.description, int id, String owner}) : super(key: key);
   final String title;
   final String description;
 
