@@ -61,7 +61,7 @@ class Client {
         body: jsonBody
     );
     int statusCode = response.statusCode;
-    print(response.body);
+    print("httpClient: postOffer responsebody: " + response.body.toString());
     print(statusCode);
     return [convert.jsonDecode(response.body), statusCode];
   }
@@ -91,19 +91,19 @@ class Client {
     Map<String, dynamic> header = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
     header['Authorization'] = token.toString();
-    String args = "?";
+    String args = "";
     if (user != null) args += "owner=$user&";
     if (name != null) args += "name=$name&";
     if (category != null) args += "category=$category&";
     if (status != null) args += "status=$status";
-
+    url = url + args;
     print("httpClient: getOffersFromServer: Posting to $url");
     var response = await http.get(url + args, headers:
       {"Content-Type": "application/json",
       "Authorization": token.toString(),
     });
     int statusCode = response.statusCode;
-    print("getOffersFromServer: Code: " + statusCode.toString());
+    print("httpClient: getOffersFromServer: Code: " + statusCode.toString());
 
     return convert.jsonDecode(response.body);
   }
@@ -129,22 +129,4 @@ class Client {
     print(statusCode);
     return [convert.jsonDecode(response.body), statusCode]; */
   }
-
-
-
-
- /* Future postAuthToServer({Map<String, dynamic> postBody, String modifier}) async {
-    String url = 'http://mobint-projekt.hci.uni-hannover.de/api/' + modifier;
-    var jsonBody = convert.json.encode(postBody);
-
-    var response = await http.post(url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonBody
-    );
-
-    int statusCode = response.statusCode;
-    return [convert.jsonDecode(response.body), statusCode];
-
-  } */
-
 }

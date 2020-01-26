@@ -35,7 +35,7 @@ class _CategoryPage extends State<CategoryPage> {
             Container(
               color: Colors.white54,
               child: ListTile(
-                onTap:  () { changePage("Outdoor"); },
+                onTap:  () { changePage("Outdoor", category: "Outdoor"); },
                 leading: Icon(Icons.cloud_queue),
                 title: Padding(
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
@@ -48,7 +48,7 @@ class _CategoryPage extends State<CategoryPage> {
             Container(
               color: Colors.white54,
               child: ListTile(
-                onTap:  () { changePage("Elektronik"); },
+                onTap:  () { changePage("Elektronik", category: "Elektronik"); },
                 leading: Icon(Icons.computer),
                 title: Padding(
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
@@ -61,7 +61,7 @@ class _CategoryPage extends State<CategoryPage> {
             Container(
               color: Colors.white54,
               child: ListTile(
-                onTap:  () { changePage("Essen"); },
+                onTap:  () { changePage("Essen", category: "Essen"); },
                 leading: Icon(Icons.fastfood),
                 title: Padding(
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
@@ -75,7 +75,7 @@ class _CategoryPage extends State<CategoryPage> {
             Container(
               color: Colors.white54,
               child: ListTile(
-                onTap:  () { changePage("Gemeinschaft"); },
+                onTap:  () { changePage("Gemeinschaft", category: "Gemeinschaft"); },
                 leading: Icon(Icons.group_add),
                 title: Padding(
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
@@ -88,7 +88,7 @@ class _CategoryPage extends State<CategoryPage> {
             Container(
               color: Colors.white54,
               child: ListTile(
-                onTap:  () { changePage("Jobs"); },
+                onTap:  () { changePage("Jobs", category: "Jobs"); },
                 leading: Icon(Icons.work),
                 title: Padding(
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
@@ -101,7 +101,7 @@ class _CategoryPage extends State<CategoryPage> {
             Container(
               color: Colors.white54,
               child: ListTile(
-                onTap:  () { changePage("Zu Verschenken"); },
+                onTap:  () { changePage("Zu Verschenken", category: "Zu Verschenken"); },
                 leading: Icon(Icons.card_giftcard),
                 title: Padding(
                   padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
@@ -116,9 +116,9 @@ class _CategoryPage extends State<CategoryPage> {
     );
   }
 
-  void changePage(pageTitle) {
+  void changePage(pageTitle, { category}) {
     Navigator.push(context,
-      MaterialPageRoute(builder: (context) => HomePage(title: pageTitle,)),
+      MaterialPageRoute(builder: (context) => HomePage(title: pageTitle, category: category)),
     );
   }
 }
