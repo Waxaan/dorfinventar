@@ -89,7 +89,7 @@ def get_articles():
     if 'desc' in request.args:
         query = query.filter(Article.name.ilike("%"+request.args['desc']+"%"))
     if 'category' in request.args:
-        query = query.filter(Article.category.ilike(request.args['category']))
+        query = query.filter(Article.category.name.ilike(request.args['category']))
     if 'status' in request.args:
         query = query.filter(Article.status.ilike(request.args['status']))
     query = query.order_by(Article.pub_date.desc()) # always show newest articles at the top
