@@ -85,16 +85,16 @@ class Client {
     });
   }
 
-  Future getOffersFromServer(token, {String user, String category, String name, String status}) async {
+  Future getOffersFromServer(token, {String user, int categoryID, String name, String status}) async {
     String url = 'http://mobint-projekt.hci.uni-hannover.de/api/' + "articles/";
 
     Map<String, dynamic> header = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
     header['Authorization'] = token.toString();
-    String args = "";
+    String args = "?";
     if (user != null) args += "owner=$user&";
     if (name != null) args += "name=$name&";
-    if (category != null) args += "category=$category&";
+    if (categoryID != null) args += "category=$categoryID&";
     if (status != null) args += "status=$status";
     url = url + args;
     print("httpClient: getOffersFromServer: Posting to $url");
@@ -128,5 +128,16 @@ class Client {
     print(response.body);
     print(statusCode);
     return [convert.jsonDecode(response.body), statusCode]; */
+  }
+
+  getCategories() async {
+    String url = 'http://mobint-projekt.hci.uni-hannover.de/api/categories/';
+    var response = await http.get(url,
+        headers: {"Content-Type": "application/json"},
+    );
+
+    int statusCode = response.statusCode;
+    return [convert.jsonDecode(response.body), statusCode];
+
   }
 }

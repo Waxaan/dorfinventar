@@ -16,6 +16,7 @@ class UserModel extends Model {
   bool loggedIn = false;
   bool get loginStatus => loggedIn;
   List<File> images = new List<File>();
+  Map<String, dynamic> categories = new Map<String, dynamic>();
 
   setToken(String _token) async => await storage.write(key: 'token', value: _token);
   setUsername(String _username) async => await storage.write(key: 'username', value: _username);
@@ -26,6 +27,19 @@ class UserModel extends Model {
 
   void resetLastOffer() {
     images = new List<File>();
+  }
+
+  setCategories() async {
+    List ret = await client.getCategories();
+    var rawCats = ret[0];
+    var code = ret[1];
+    print("usermodel: setCategories Code: " + code.toString());
+    categories = new Map<String, dynamic>();
+    int index = 1;
+    for (Map<String, dynamic> cat in rawCats) {
+      categories[cat['name'] + '_desc'] = cat['description'];
+      categories[cat['name'] + '_id'] = index++;
+    }
   }
 
   /// Main Login Function
@@ -161,8 +175,17 @@ class UserModel extends Model {
 
 
   Future getOffers({bool user, String owner, String category, String id, String description, String name, String status}) async {
-    if (user) return await client.getOffersFromServer(await this.getToken(), user: await this.getUsername(), name: name, category: category, status: status);
-    else return await client.getOffersFromServer(this.getToken(), name: name, category: category, status: status);
+    var offers;
+    int _cat;
+    if(category != null) _cat = categories[category + "_id"];
+
+    if (user) offers = await client.getOffersFromServer(await this.getToken(), user: await this.getUsername(), name: name, categoryID: _cat, status: status);
+    else offers = await client.getOffersFromServer(this.getToken(), name: name, categoryID: _cat, status: status);
+    if (offers.toString() == "[]") {
+      List<int> none = [0];
+      return none;
+    } else
+      return offers;
   }
 
 

@@ -19,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePage extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,13 +41,14 @@ class _HomePage extends State<HomePage> {
         FutureBuilder(
             future: model.getOffers(user: true, category: widget.category),
             builder: (context, snapshot) {
+              print(snapshot.hasData);
               if (snapshot.hasData) {
                 return Expanded(
                     child: ListView.builder(
                         itemCount: snapshot.data.length,
                         itemBuilder: (context, index) {
-                          print("HomePage: snapshotResponseData $index:" + snapshot.data[index].toString());
-                          if (snapshot.data[index].toString() == "null") {
+                          //print("HomePage: snapshotResponseData $index:" + snapshot.data[index].toString());
+                          if (snapshot.data[index] == 0) {
                             return ListTile(
                               title: Text("Leider ist kein Angebot in dieser Kategorie verfügbar"),
                             );

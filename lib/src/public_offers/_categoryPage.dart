@@ -3,122 +3,150 @@ import 'package:loader_search_bar/loader_search_bar.dart';
 import 'package:Dorfinventar/src/public_offers/_homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:Dorfinventar/src/customDrawer.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import '../userModel.dart';
 
 class CategoryPage extends StatefulWidget {
   CategoryPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _CategoryPage createState() => _CategoryPage();}
+  _CategoryPage createState() => _CategoryPage();
+}
 
 class _CategoryPage extends State<CategoryPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: SearchBar(
           defaultBar: AppBar(
             title: Text(widget.title),
-          )
-      ),
+      )),
       body: _categoryWidget(),
     );
   }
 
-
   Widget _categoryWidget() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-        child: ListView(
-          children: <Widget>[
-            Container(
-              color: Colors.white54,
-              child: ListTile(
-                onTap:  () { changePage("Outdoor", category: "Outdoor"); },
-                leading: Icon(Icons.cloud_queue),
-                title: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                  child: Text("Outdoor"),
+    return ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+          child: ListView(
+            children: <Widget>[
+              Container(
+                color: Colors.white54,
+                child: ListTile(
+                  onTap: () {
+                    changePage("Outdoor", category: "Outdoor");
+                  },
+                  leading: Icon(Icons.cloud_queue),
+                  title: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
+                    child: Text("Outdoor"),
+                  ),
+                  subtitle: Text(
+                    "Garten, Dienstleistungen und mehr",
+                  ),
                 ),
-                subtitle: Text("Garten, Dienstleistungen und mehr",),
               ),
-            ),
-            Divider(),
-            Container(
-              color: Colors.white54,
-              child: ListTile(
-                onTap:  () { changePage("Elektronik", category: "Elektronik"); },
-                leading: Icon(Icons.computer),
-                title: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                  child: Text("Elektronik"),
+              Divider(),
+              Container(
+                color: Colors.white54,
+                child: ListTile(
+                  onTap: () {
+                    changePage("Elektronik", category: "Elektronik");
+                  },
+                  leading: Icon(Icons.computer),
+                  title: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
+                    child: Text("Elektronik"),
+                  ),
+                  subtitle: Text(
+                    "Handys, Computer, größeres...",
+                  ),
                 ),
-                subtitle: Text("Handys, Computer, größeres...",),
               ),
-            ),
-            Divider(),
-            Container(
-              color: Colors.white54,
-              child: ListTile(
-                onTap:  () { changePage("Essen", category: "Essen"); },
-                leading: Icon(Icons.fastfood),
-                title: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                  child: Text("Essen"),
+              Divider(),
+              Container(
+                color: Colors.white54,
+                child: ListTile(
+                  onTap: () {
+                    changePage("Essen", category: "Essen");
+                  },
+                  leading: Icon(Icons.fastfood),
+                  title: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
+                    child: Text("Essen"),
+                  ),
+                  subtitle: Text(
+                    "Selbstgemachtes oder Überschüssiges",
+                  ),
                 ),
-                subtitle: Text("Selbstgemachtes oder Überschüssiges",),
               ),
-
-            ),
-            Divider(),
-            Container(
-              color: Colors.white54,
-              child: ListTile(
-                onTap:  () { changePage("Gemeinschaft", category: "Gemeinschaft"); },
-                leading: Icon(Icons.group_add),
-                title: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                  child: Text("Gemeinschaft"),
+              Divider(),
+              Container(
+                color: Colors.white54,
+                child: ListTile(
+                  onTap: () {
+                    changePage("Gemeinschaft", category: "Gemeinschaft");
+                  },
+                  leading: Icon(Icons.group_add),
+                  title: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
+                    child: Text("Gemeinschaft"),
+                  ),
+                  subtitle: Text(
+                    "Tickets, Treffen oder Fahrten",
+                  ),
                 ),
-                subtitle: Text("Tickets, Treffen oder Fahrten",),
               ),
-            ),
-            Divider(),
-            Container(
-              color: Colors.white54,
-              child: ListTile(
-                onTap:  () { changePage("Jobs", category: "Jobs"); },
-                leading: Icon(Icons.work),
-                title: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                  child: Text("Jobs"),
+              Divider(),
+              Container(
+                color: Colors.white54,
+                child: ListTile(
+                  onTap: () {
+                    changePage("Jobs", category: "Jobs");
+                  },
+                  leading: Icon(Icons.work),
+                  title: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
+                    child: Text("Jobs"),
+                  ),
+                  subtitle: Text(
+                    "Ausbildung, Beruf oder Minijob",
+                  ),
                 ),
-                subtitle: Text("Ausbildung, Beruf oder Minijob",),
               ),
-            ),
-            Divider(),
-            Container(
-              color: Colors.white54,
-              child: ListTile(
-                onTap:  () { changePage("Zu Verschenken", category: "Zu Verschenken"); },
-                leading: Icon(Icons.card_giftcard),
-                title: Padding(
-                  padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                  child: Text("Zu Verschenken"),
+              Divider(),
+              Container(
+                color: Colors.white54,
+                child: ListTile(
+                  onTap: () {
+                    changePage("Zu Verschenken", category: "Zu Verschenken");
+                  },
+                  leading: Icon(Icons.card_giftcard),
+                  title: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
+                    child: Text("Zu Verschenken"),
+                  ),
+                  subtitle: Text(
+                    "Alles, was einen neuen Besitzer sucht",
+                  ),
                 ),
-                subtitle: Text("Alles, was einen neuen Besitzer sucht",),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
-  void changePage(pageTitle, { category}) {
-    Navigator.push(context,
-      MaterialPageRoute(builder: (context) => HomePage(title: pageTitle, category: category)),
+  void changePage(pageTitle, {category}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => HomePage(title: pageTitle, category: category)),
     );
   }
 }
