@@ -4,13 +4,11 @@ import 'package:scoped_model/scoped_model.dart';
 import '../customDrawer.dart';
 import '../userModel.dart';
 import 'publicOfferCard.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title, this.loggedIn, this.category}) : super(key: key);
+  HomePage({Key key, this.title, this.loggedIn}) : super(key: key);
   final String title;
   final bool loggedIn;
-  final String category;
   int index = 0;
   Future<List<PublicOfferCard>> offers;
 
@@ -39,7 +37,7 @@ class _HomePage extends State<HomePage> {
           title: Text("Neuste Angebote"),
         ),
         FutureBuilder(
-            future: model.getOffers(user: true, category: widget.category),
+            future: model.getOffers(user: true, category: widget.title),
             builder: (context, snapshot) {
               print(snapshot.hasData);
               if (snapshot.hasData) {
@@ -53,14 +51,14 @@ class _HomePage extends State<HomePage> {
                               title: Text("Leider ist kein Angebot in dieser Kategorie verfügbar"),
                             );
                           }
-                          return PublicOfferCard(
-                            price: snapshot.data[index]['price'],
-                            name: snapshot.data[index]['name'],
-                            description: snapshot.data[index]['description'],
-                            ownerID: snapshot.data[index]['owner'],
-                            articleID: snapshot.data[index]['id'],
-                          );
-                        }));
+                        return PublicOfferCard(
+                          price: snapshot.data[index]['price'],
+                          name: snapshot.data[index]['name'],
+                          description: snapshot.data[index]['description'],
+                          ownerID: snapshot.data[index]['owner'],
+                          articleID: snapshot.data[index]['id'],
+                        );
+                      }));
               } else {
                 return Column(
                     mainAxisAlignment: MainAxisAlignment.center,

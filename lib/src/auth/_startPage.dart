@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../userModel.dart';
-
-/*  Start Page
-      Gibt eine kurze Einführung in das Konzept der App
-
- */
-
 
 class StartPage extends StatefulWidget {
   StartPage({Key key, this.title}) : super(key: key);

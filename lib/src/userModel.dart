@@ -4,8 +4,7 @@ import 'package:Dorfinventar/src/helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:Dorfinventar/src/public_offers/publicOfferCard.dart';
+import 'package:http/http.dart' as prefix0;
 
 import 'httpClient.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -17,6 +16,7 @@ class UserModel extends Model {
   bool get loginStatus => loggedIn;
   List<File> images = new List<File>();
   Map<String, dynamic> categories = new Map<String, dynamic>();
+  List<String> categoryList = new List<String>();
 
   setToken(String _token) async => await storage.write(key: 'token', value: _token);
   setUsername(String _username) async => await storage.write(key: 'username', value: _username);
@@ -29,16 +29,21 @@ class UserModel extends Model {
     images = new List<File>();
   }
 
+  getCategoryList() { return categoryList; }
+  getCategoryDetail() { return categories; }
   setCategories() async {
     List ret = await client.getCategories();
     var rawCats = ret[0];
     var code = ret[1];
     print("usermodel: setCategories Code: " + code.toString());
     categories = new Map<String, dynamic>();
+    categoryList = new List<String>();
     int index = 1;
     for (Map<String, dynamic> cat in rawCats) {
+      print("TEST, $index");
       categories[cat['name'] + '_desc'] = cat['description'];
       categories[cat['name'] + '_id'] = index++;
+      categoryList.add(cat['name']);
     }
   }
 
@@ -142,13 +147,14 @@ class UserModel extends Model {
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
-  postOffer(BuildContext context, {String title, String description, int price, String category, bool available}) async {
+  postOffer(BuildContext context, {String title, String description, int price, int category, bool available}) async {
     var postBody = new Map<String, dynamic>();
     postBody['name'] = title;
     postBody['desc'] = description;
-    postBody['category'] = 1;
+    postBody['category'] = category;
     postBody['price'] = price;
     postBody['available'] = available;
+    print(postBody.toString());
     client.postOfferToServer(modifier: "articles/", postBody: postBody, images: this.images, token: await getToken());
     int index = 0;
     for (File image in images) {
@@ -177,7 +183,9 @@ class UserModel extends Model {
   Future getOffers({bool user, String owner, String category, String id, String description, String name, String status}) async {
     var offers;
     int _cat;
+    print("USER MODEL: CATEGORY: " + category.toString());
     if(category != null) _cat = categories[category + "_id"];
+    print("USER MODEL: CATEGORY ID: " + _cat.toString());
 
     if (user) offers = await client.getOffersFromServer(await this.getToken(), user: await this.getUsername(), name: name, categoryID: _cat, status: status);
     else offers = await client.getOffersFromServer(this.getToken(), name: name, categoryID: _cat, status: status);
@@ -187,22 +195,6 @@ class UserModel extends Model {
     } else
       return offers;
   }
-
-
-
-/* Future getMyOffers() async {
-    return await client.getMyOffersFromServer(this.getToken());
-      final List<dynamic> myResponse= json.decode(response.body);
-
-      return await client.getMyOffersFromServer(this.getToken()).then((List<dynamic> ret) (() {
-
-    });
-    for (var offer in ret) {
-      print(offer.toString());
-      offers.add(new PublicOfferCard(price: offer['price'], name: offer['name'], description: offer['description'],price: offer['price'], name: offer['name'], description: offer['description'],));
-    }
-    return ret;
-  }*/
 
   void sendMessage() {
     client.postMessageToServer();

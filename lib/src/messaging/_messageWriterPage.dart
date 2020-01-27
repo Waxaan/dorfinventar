@@ -97,7 +97,6 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
 
 
   List<MessageTile> getItems(String username) {
-    Random random = new Random();
     bool isuser = true;
     List<MessageTile> items = <MessageTile>[];
     items.addAll([
@@ -112,20 +111,5 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
       MessageTile(isuser: !isuser, content: "Immer wieder gerne!",),
     ]);
     return items;
-/*
-    items[1].addAll([
-      MessageTile(username: username,
-        content: "Steht das Palettenbett noch zu verkauf?",),
-      MessageTile(
-        username: _myName, content: "Ja, klar, aber der Andrang ist hoch!",),
-      MessageTile(
-        username: username, content: "Echt? Was ist der letzte Preis?",),
-      MessageTile(username: _myName, content: "35€",),
-      MessageTile(username: username, content: "Dann würd ich dir 40€ geben.",),
-      MessageTile(username: _myName,
-        content: "Ich schau mal, was die andere Person sagt (:",),
-      MessageTile(username: username, content: "Ok",),
-    ]);
-    return items[random.nextInt(2)]; */
   }
 }

@@ -22,9 +22,14 @@ class _NewOfferPage extends State<NewOfferPage> {
   final controllerTitle = TextEditingController();
   final controllerDescription = TextEditingController();
   final controllerPrice = MoneyMaskedTextController(
-      decimalSeparator: '.', thousandSeparator: '.', rightSymbol: "€");
+      decimalSeparator: '.', thousandSeparator: ',', rightSymbol: "€");
   bool itemIsAvailable = true;
   var _category = "Kategorie";
+
+  int getControllerPrice() {
+    String _price = controllerPrice.text.replaceAll(new RegExp(r'[^\w\s]+'),'');
+    return int.parse(_price);
+  }
 
   @override
   void initState() {
@@ -102,16 +107,22 @@ class _NewOfferPage extends State<NewOfferPage> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(2.0))),
                         ))),
-                new DropdownButton<String>(
-                    hint: Text(_category),
-                    items: <String>['Outdoor', 'Elektronik', 'Umbau', 'Essen']
-                        .map((String value) {
-                      return new DropdownMenuItem<String>(
+                Listener(
+                    onPointerDown: (_) => FocusScope.of(context).unfocus(),
+                    child: DropdownButton<String>(
+                      hint: Text(_category),
+                      items: model.getCategoryList().map<DropdownMenuItem<String>>((value) =>
+                      new DropdownMenuItem<String>(
                         value: value,
                         child: new Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String category) => _category = category),
+                      )
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _category = value;
+                        });
+                      },
+                    )),
                 Checkbox(
                   onChanged: (bool b) => {
                     setState(() {
@@ -120,7 +131,7 @@ class _NewOfferPage extends State<NewOfferPage> {
                   },
                   value: itemIsAvailable,
                 ),
-                Text("Ist verfügbar")
+                Text("Verfügbar")
               ],
             )),
         Padding(
@@ -140,8 +151,11 @@ class _NewOfferPage extends State<NewOfferPage> {
                   model.postOffer(context,
                       title: controllerTitle.text,
                       description: controllerDescription.text,
-                      price: (double.parse(controllerPrice.text.substring(0, controllerPrice.text.length-1))*100).toInt(),
-                      category: _category,
+                      price: getControllerPrice(),
+                      /*price: (double.parse(controllerPrice.text
+                          .substring(0, controllerPrice.text.length - 1))*100)
+                          .toInt(), */
+                      category: model.getCategoryDetail()[_category + "_id"],
                       available: itemIsAvailable);
                   Navigator.pop(context);
                 },
@@ -154,7 +168,8 @@ class _NewOfferPage extends State<NewOfferPage> {
     print("CarouselSliderClick on index " + i.toString());
     File file;
     print("newOfferPage: picking Image");
-    file = await ImagePicker.pickImage(source: ImageSource.camera, maxWidth: 690, maxHeight: 690);
+    file = await ImagePicker.pickImage(
+        source: ImageSource.camera, maxWidth: 690, maxHeight: 690);
     if (file != null) print("newOfferPage: Image successfully picked");
     return file;
   }

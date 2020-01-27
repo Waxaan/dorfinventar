@@ -79,6 +79,6 @@ class PublicOfferCard extends Card {
   String getPriceString(int price) {
     if (price == 0)
       return "Gratis";
-    return (price / 100).toStringAsFixed(2) + "€";
+    return (price.toDouble()/10000).toStringAsFixed(2) + "€";
   }
 }

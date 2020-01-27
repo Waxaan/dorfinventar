@@ -2,7 +2,6 @@ import 'package:loader_search_bar/loader_search_bar.dart';
 
 import 'package:Dorfinventar/src/public_offers/_homePage.dart';
 import 'package:flutter/material.dart';
-import 'package:Dorfinventar/src/customDrawer.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import '../userModel.dart';
@@ -30,123 +29,48 @@ class _CategoryPage extends State<CategoryPage> {
   Widget _categoryWidget() {
     return ScopedModelDescendant<UserModel>(builder: (context, child, model) {
       return Center(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
-          child: ListView(
-            children: <Widget>[
-              Container(
-                color: Colors.white54,
-                child: ListTile(
-                  onTap: () {
-                    changePage("Outdoor", category: "Outdoor");
-                  },
-                  leading: Icon(Icons.cloud_queue),
-                  title: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                    child: Text("Outdoor"),
-                  ),
-                  subtitle: Text(
-                    "Garten, Dienstleistungen und mehr",
-                  ),
-                ),
-              ),
-              Divider(),
-              Container(
-                color: Colors.white54,
-                child: ListTile(
-                  onTap: () {
-                    changePage("Elektronik", category: "Elektronik");
-                  },
-                  leading: Icon(Icons.computer),
-                  title: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                    child: Text("Elektronik"),
-                  ),
-                  subtitle: Text(
-                    "Handys, Computer, größeres...",
-                  ),
-                ),
-              ),
-              Divider(),
-              Container(
-                color: Colors.white54,
-                child: ListTile(
-                  onTap: () {
-                    changePage("Essen", category: "Essen");
-                  },
-                  leading: Icon(Icons.fastfood),
-                  title: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                    child: Text("Essen"),
-                  ),
-                  subtitle: Text(
-                    "Selbstgemachtes oder Überschüssiges",
-                  ),
-                ),
-              ),
-              Divider(),
-              Container(
-                color: Colors.white54,
-                child: ListTile(
-                  onTap: () {
-                    changePage("Gemeinschaft", category: "Gemeinschaft");
-                  },
-                  leading: Icon(Icons.group_add),
-                  title: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                    child: Text("Gemeinschaft"),
-                  ),
-                  subtitle: Text(
-                    "Tickets, Treffen oder Fahrten",
-                  ),
-                ),
-              ),
-              Divider(),
-              Container(
-                color: Colors.white54,
-                child: ListTile(
-                  onTap: () {
-                    changePage("Jobs", category: "Jobs");
-                  },
-                  leading: Icon(Icons.work),
-                  title: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                    child: Text("Jobs"),
-                  ),
-                  subtitle: Text(
-                    "Ausbildung, Beruf oder Minijob",
-                  ),
-                ),
-              ),
-              Divider(),
-              Container(
-                color: Colors.white54,
-                child: ListTile(
-                  onTap: () {
-                    changePage("Zu Verschenken", category: "Zu Verschenken");
-                  },
-                  leading: Icon(Icons.card_giftcard),
-                  title: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
-                    child: Text("Zu Verschenken"),
-                  ),
-                  subtitle: Text(
-                    "Alles, was einen neuen Besitzer sucht",
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+          child: ListView.separated(
+              itemCount: model.getCategoryList().length,
+              separatorBuilder: (context, index) => Divider(),
+              itemBuilder: (context, index) {
+                return categoryTileBuilder(
+                    model.getCategoryList()[index], model.getCategoryDetail());
+              }));
     });
   }
 
-  void changePage(pageTitle, {category}) {
+  void changePage(category) {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => HomePage(title: pageTitle, category: category)),
+          builder: (context) => HomePage(title: category)),
     );
+  }
+
+  categoryTileBuilder(String category, Map<String, dynamic> categoryDetail) {
+    var icons = {
+      "Outdoor": Icons.cloud_queue,
+      "Elektronik": Icons.computer,
+      "Essen": Icons.fastfood,
+      "Gemeinschaft": Icons.group_add,
+      "Jobs": Icons.work,
+      "Zu Verschenken": Icons.card_giftcard
+    };
+
+    return Padding(
+        padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+        child: Container(
+          color: Colors.white54,
+          child: ListTile(
+            onTap: () => changePage(category),
+            leading:
+                Icon(icons[category] != null ? icons[category] : Icons.warning),
+            title: Padding(
+              padding: EdgeInsets.fromLTRB(0, 12, 0, 3),
+              child: Text(category),
+            ),
+            subtitle: Text(categoryDetail[category + '_desc']),
+          ),
+        ));
   }
 }
