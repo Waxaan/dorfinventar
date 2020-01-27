@@ -39,24 +39,25 @@ class _HomePage extends State<HomePage> {
         FutureBuilder(
             future: model.getOffers(user: true, category: widget.title),
             builder: (context, snapshot) {
-              print(snapshot.hasData);
               if (snapshot.hasData) {
                 return Expanded(
                     child: ListView.builder(
                         itemCount: snapshot.data.length,
                         itemBuilder: (context, index) {
-                          //print("HomePage: snapshotResponseData $index:" + snapshot.data[index].toString());
                           if (snapshot.data[index] == 0) {
                             return ListTile(
                               title: Text("Leider ist kein Angebot in dieser Kategorie verfügbar"),
                             );
                           }
+                          print(snapshot.data[index]);
                         return PublicOfferCard(
                           price: snapshot.data[index]['price'],
                           name: snapshot.data[index]['name'],
+                          category: snapshot.data[index]['category_name'],
                           description: snapshot.data[index]['description'],
-                          ownerID: snapshot.data[index]['owner'],
+                          owner: snapshot.data[index]['owner'],
                           articleID: snapshot.data[index]['id'],
+                          isActive: snapshot.data[index]['status'],
                         );
                       }));
               } else {

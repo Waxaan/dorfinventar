@@ -40,7 +40,6 @@ class UserModel extends Model {
     categoryList = new List<String>();
     int index = 1;
     for (Map<String, dynamic> cat in rawCats) {
-      print("TEST, $index");
       categories[cat['name'] + '_desc'] = cat['description'];
       categories[cat['name'] + '_id'] = index++;
       categoryList.add(cat['name']);
@@ -154,7 +153,6 @@ class UserModel extends Model {
     postBody['category'] = category;
     postBody['price'] = price;
     postBody['available'] = available;
-    print(postBody.toString());
     client.postOfferToServer(modifier: "articles/", postBody: postBody, images: this.images, token: await getToken());
     int index = 0;
     for (File image in images) {

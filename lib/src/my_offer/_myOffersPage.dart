@@ -33,7 +33,6 @@ class _MyOffersPage extends State<MyOffersPage> {
                         child: ListView.builder(
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, index) {
-                              print(snapshot.data[index]);
                               return PublicOfferCard(
                                 price: snapshot.data[index]['price'],
                                 name: snapshot.data[index]['name'],

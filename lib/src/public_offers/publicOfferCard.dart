@@ -7,14 +7,17 @@ import 'package:scoped_model/scoped_model.dart';
 import '../userModel.dart';
 
 class PublicOfferCard extends Card {
+
   PublicOfferCard(
-      {Key key, this.name, this.description, this.price, this.articleID, this.owner, ownerID})
+      {Key key, this.name, this.description, this.price, this.articleID, this.owner, this.isActive, this.category,})
       : super(key: key);
   final String name;
   final String description;
   final int price;
   final int articleID;
   final String owner;
+  final String isActive;
+  final String category;
 
 
   @override
@@ -28,9 +31,14 @@ class PublicOfferCard extends Card {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) =>
                         OfferPage(title: this.name,
+                            category: this.category,
                             description: this.description,
-                            id: this.articleID,
-                            owner: this.owner))),
+                            articleID: this.articleID,
+                            owner: this.owner,
+                            price: getPriceString(this.price),
+                            isActive: this.isActive,
+
+                            ))),
             child: Card(
               color: Colors.white54,
               elevation: 3,

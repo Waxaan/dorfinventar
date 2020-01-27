@@ -152,9 +152,6 @@ class _NewOfferPage extends State<NewOfferPage> {
                       title: controllerTitle.text,
                       description: controllerDescription.text,
                       price: getControllerPrice(),
-                      /*price: (double.parse(controllerPrice.text
-                          .substring(0, controllerPrice.text.length - 1))*100)
-                          .toInt(), */
                       category: model.getCategoryDetail()[_category + "_id"],
                       available: itemIsAvailable);
                   Navigator.pop(context);
