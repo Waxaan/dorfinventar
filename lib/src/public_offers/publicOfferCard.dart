@@ -8,8 +8,9 @@ import '../userModel.dart';
 
 class PublicOfferCard extends Card {
 
+
   PublicOfferCard(
-      {Key key, this.name, this.description, this.price, this.articleID, this.owner, this.isActive, this.category,})
+      {Key key, this.name, this.description, this.price, this.articleID, this.owner, this.isActive, this.category, this.loggedIn})
       : super(key: key);
   final String name;
   final String description;
@@ -18,6 +19,7 @@ class PublicOfferCard extends Card {
   final String owner;
   final String isActive;
   final String category;
+  final bool loggedIn;
 
 
   @override
@@ -62,7 +64,7 @@ class PublicOfferCard extends Card {
                             padding: EdgeInsets.only(right: 12),
                             child: Text(getPriceString(this.price))
                         ),
-                        FlatButton(
+                        this.loggedIn? FlatButton(
                           textColor: Colors.green,
                           child: const Text('Nachricht'),
                           onPressed: () {
@@ -70,7 +72,9 @@ class PublicOfferCard extends Card {
                                 MaterialPageRoute(builder: (context) =>
                                     MessagesPage(title: "Nachrichten",),));
                           },
-                        ),
+                        )
+                            :
+                        Container(width: 0, height: 0,),
                       ]
                   ),
                 ],
