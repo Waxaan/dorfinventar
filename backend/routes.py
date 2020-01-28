@@ -231,7 +231,7 @@ def upload_images(id):
     db.session.commit()
     return jsonify(article.serialize), 201
 
-@app.route("/api/chat/messages/", methods=['POST'])
+@app.route("/api/chat/messages", methods=['POST'])
 @jwt_required()
 def send_message():
 
@@ -271,10 +271,10 @@ def send_message():
         db.session.add(msg_obj)    
     # step2.2: falls nein: create conversation, add message to conversation
     else:
-        conv_obj = Conversation(subject=subject, user1=origin_user_obj.username, user2=other_user_obj.username)
-        db.session.add(conv_obj)
+        conv = Conversation(subject=subject, user1=origin_user_obj.username, user2=other_user_obj.username)
+        db.session.add(conv)
         db.session.flush()
-        msg_obj = Message(conversation_id=conv_obj.id, message=msg, sender=origin_user_obj.username,\
+        msg_obj = Message(conversation_id=conv.id, message=msg, sender=origin_user_obj.username,\
                           recipient=other_user_obj.username) #, pub_date=datetime.now()
         db.session.add(msg_obj)
 

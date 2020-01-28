@@ -105,7 +105,7 @@ class Message(db.Model):
     def serialize(self):
         return {
             "message": self.message,
-            "message_date": self.message_date,
+            "message_date": self.pub_date,
         }    
 
     
