@@ -15,18 +15,21 @@ class MessageCard extends Card {
     return Padding(
       padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
       child: Center(
-        child: GestureDetector(
-          onTap: () => showSnackbar(context),
-          onLongPress: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MessagesWriterPage(username: this.username, id: "123",))),
-          child: Card(
-            elevation: 3.0,
-            color: Colors.white54,
+        child: Card(
+          elevation: 3.0,
+          color: Colors.white54,
+          child: GestureDetector(
+            onTap: () {
+              print("hello world");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MessagesWriterPage(username: this.username, id: "123",)));
+            },
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  onTap: () {},
                   trailing: Icon(Icons.reply),
                   leading: Icon(getUserIcon(userIconID)),
                   title: Padding(

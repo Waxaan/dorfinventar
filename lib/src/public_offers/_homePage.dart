@@ -6,22 +6,32 @@ import '../userModel.dart';
 import 'publicOfferCard.dart';
 
 class HomePage extends StatefulWidget {
+
   HomePage({Key key, this.title, this.loggedIn}) : super(key: key);
   final String title;
   final bool loggedIn;
   int index = 0;
+  String searchBody;
   Future<List<PublicOfferCard>> offers;
-
   @override
   _HomePage createState() => _HomePage();
 }
 
 class _HomePage extends State<HomePage> {
 
+  _updateSearch(context, query) {
+    print(query);
+    setState(() {
+      widget.searchBody = query;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: SearchBar(
+            onQueryChanged: (query) => _updateSearch(context, query),
+            onQuerySubmitted: (query) => _updateSearch(context, query),
             defaultBar: AppBar(
               title: Text(widget.title),
         )),
@@ -37,7 +47,7 @@ class _HomePage extends State<HomePage> {
           title: Text("Neuste Angebote"),
         ),
         FutureBuilder(
-            future: model.getOffers(user: true, category: widget.title),
+            future: model.getOffers(user: true, category: widget.title, name: widget.searchBody),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Expanded(
@@ -49,7 +59,6 @@ class _HomePage extends State<HomePage> {
                               title: Text("Leider ist kein Angebot in dieser Kategorie verfügbar"),
                             );
                           }
-                          print(snapshot.data[index]);
                         return PublicOfferCard(
                           price: snapshot.data[index]['price'],
                           name: snapshot.data[index]['name'],

@@ -139,4 +139,22 @@ class Client {
     return [convert.jsonDecode(response.body), statusCode];
 
   }
+
+  retrieveMessagesFromConversation(token) async {
+    String url = 'http://mobint-projekt.hci.uni-hannover.de/api/chat/messages/';
+
+    Map<String, dynamic> header = new Map<String, dynamic>();
+    header['Content-Type'] = 'application/json';
+    header['Authorization'] = token.toString();
+    print("httpClient: retrieveMessagesFromConversation: Posting to $url");
+    var response = await http.get(url, headers:
+    {"Content-Type": "application/json",
+      "Authorization": token.toString(),
+    });
+    int statusCode = response.statusCode;
+    print(response.body.toString());
+    print("httpClient: retrieveMessagesFromConversation: Code: " + statusCode.toString());
+
+    return convert.jsonDecode(response.body);
+  }
 }

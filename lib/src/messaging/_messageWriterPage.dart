@@ -38,8 +38,8 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              FutureBuilder(
-                  future: model.getOffers(),
+              /*FutureBuilder(
+                  future: model.retrieveConversationMessages(1),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Expanded(
@@ -68,7 +68,7 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
                             )
                           ]);
                     }
-                  }),
+                  }), */
               Expanded(
                 child: ListView.builder(
                 itemCount: items.length,

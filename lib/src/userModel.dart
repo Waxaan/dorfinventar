@@ -58,10 +58,10 @@ class UserModel extends Model {
       loggedIn = true;
       notifyListeners();
       Navigator.pushNamed(context, '/home');
-      showSnackbar(context, message: "Login Erfolgreich.");
+      showSnackbar(context, message: "Login Erfolgreich.", color: Colors.green);
     }
     if (statusCode == 0) return;
-    showSnackbar(context, message: "Login Fehlgeschlagen. Code: " + statusCode.toString());
+    showSnackbar(context, message: "Login Fehlgeschlagen. Code: " + statusCode.toString(), color: Colors.red);
   }
 
   Future logMeIn(BuildContext context, {String name, String password}) async {
@@ -70,10 +70,10 @@ class UserModel extends Model {
     int statusCode = 0;
     var newToken;
     if (name.length < 1) {
-      showSnackbar(context, message: "Name muss eingetragen werden.");
+      showSnackbar(context, message: "Name muss eingetragen werden.", color: Colors.red);
       return [statusCode, newToken];
     } else if (password.length < 1) {
-      showSnackbar(context, message: "Passwort muss eingetragen werden.");
+      showSnackbar(context, message: "Passwort muss eingetragen werden.", color: Colors.red);
       return [statusCode, newToken];
     }
 
@@ -98,16 +98,16 @@ class UserModel extends Model {
     int statusCode = 404;
 
     if (name.length < 1) {
-      showSnackbar(context, message: "Name muss eingetragen werden.");
+      showSnackbar(context, message: "Name muss eingetragen werden.", color: Colors.red);
       return;
     } else if (email.length < 3) {
-      showSnackbar(context, message: "Email muss eingetragen werden.");
+      showSnackbar(context, message: "Email muss eingetragen werden.", color: Colors.red);
       return;
     } else if (pass.length < 1 || pass2.length < 1) {
-      showSnackbar(context, message: "Passwort muss eingetragen werden.");
+      showSnackbar(context, message: "Passwort muss eingetragen werden.", color: Colors.red);
       return;
     } else if (pass != pass2) {
-      showSnackbar(context, message: "Passwörter sind nicht identisch.");
+      showSnackbar(context, message: "Passwörter sind nicht identisch.", color: Colors.red);
       return;
     }
 
@@ -116,9 +116,9 @@ class UserModel extends Model {
     if (statusCode == 201) {
       login(context, name: name, password: pass);
     } else if (statusCode == 400) {
-      showSnackbar(context, message: "Fehler beim Registrieren. Benutzername oder Email bereits vergeben.");
+      showSnackbar(context, message: "Fehler beim Registrieren. Benutzername oder Email bereits vergeben.", color: Colors.red);
     } else {
-      showSnackbar(context, message: "Fehler beim Registrieren. Code: " + statusCode.toString());
+      showSnackbar(context, message: "Fehler beim Registrieren. Code: " + statusCode.toString(), color: Colors.red);
     }
   }
 
@@ -131,11 +131,11 @@ class UserModel extends Model {
       loggedIn = true;
       notifyListeners();
       Navigator.pushNamed(context, '/home');
-      showSnackbar(context, message: "Login Erfolgreich.");
+      showSnackbar(context, message: "Login Erfolgreich.", color: Colors.green);
       return true;
     }
     Navigator.pushNamed(context, '/login');
-    showSnackbar(context, message: "Automatisch Angemeldet.");
+    showSnackbar(context, message: "Automatisch Angemeldet.", color: Colors.green);
     return false;
   }
 
@@ -192,6 +192,13 @@ class UserModel extends Model {
       return none;
     } else
       return offers;
+  }
+
+  retrieveConversationMessages(int id) async {
+    var messages;
+    messages = client.retrieveMessagesFromConversation(await getToken());
+    print("Usermodel: messages: " + messages.toString());
+    return messages;
   }
 
   void sendMessage() {

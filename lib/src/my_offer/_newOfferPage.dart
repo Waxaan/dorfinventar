@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Dorfinventar/src/helpers.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -148,13 +149,15 @@ class _NewOfferPage extends State<NewOfferPage> {
         Center(
             child: RaisedButton(
                 onPressed: () {
-                  model.postOffer(context,
+                  if (areInputsValid(context, controllerTitle.text, controllerDescription.text, _category)) {
+                    model.postOffer(context,
                       title: controllerTitle.text,
                       description: controllerDescription.text,
                       price: getControllerPrice(),
                       category: model.getCategoryDetail()[_category + "_id"],
-                      available: itemIsAvailable);
-                  Navigator.pop(context);
+                      available: !itemIsAvailable);
+                    Navigator.pop(context);
+                  }
                 },
                 child: Text("Angebot einstellen")))
       ]);
@@ -171,7 +174,20 @@ class _NewOfferPage extends State<NewOfferPage> {
     return file;
   }
 
-  changeItemAvailability() {
-    itemIsAvailable = !itemIsAvailable;
+  bool areInputsValid(BuildContext context, String title, String desc, String category) {
+    if(title.length < 1) {
+      showSnackbar(context, message: "Es wurde kein Titel gesetzt.", color: Colors.red);
+      return false;
+    }
+    if(category == "Kategorie") {
+      showSnackbar(context, message: "Es wurde keine Kategorie gesetzt.", color: Colors.red);
+      return false;
+    }
+    if(desc.length < 1) {
+      showSnackbar(context, message: "Es wurde keine Beschreibung gesetzt.", color: Colors.red);
+      return false;
+    }
+    print("$title, $desc, $category");
+    return true;
   }
 }

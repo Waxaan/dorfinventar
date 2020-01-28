@@ -29,7 +29,6 @@ class _OfferPage extends State<OfferPage> {
   @override
 
   Widget build(BuildContext context) {
-    print(widget.category.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),

@@ -25,23 +25,6 @@ class _LoginPage extends State<LoginPage> {
   final myControllerName = TextEditingController();
   final myControllerPass = TextEditingController();
 
-  /*_init() async{
-
-    final storage = new FlutterSecureStorage();
-    String token = await storage.read(key: 'token');
-
-    if (token != null){
-      Navigator.pushNamed(context, '/home');
-    }
-
-  }
-
-  @override
-  void initState(){
-    super.initState();
-    _init();
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
