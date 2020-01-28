@@ -187,8 +187,8 @@ class UserModel extends Model {
     if(category != null) _cat = categories[category + "_id"];
     print("USER MODEL: CATEGORY ID: " + _cat.toString());
 
-    if (user) offers = await client.getOffersFromServer(await this.getToken(), owner: await this.getUsername(), name: name, categoryID: _cat, status: status);
-    else offers = await client.getOffersFromServer(this.getToken(), name: name, categoryID: _cat, status: status);
+    if (user) offers = await client.getOffersFromServer(await this.getToken(), name: name, categoryID: _cat, status: status, owner: await this.getUsername());
+    else offers = await client.getOffersFromServer(await this.getToken(), name: name, categoryID: _cat, status: status);
     if (offers.toString() == "[]") {
       List<int> none = [0];
       return none;

@@ -47,7 +47,7 @@ class _HomePage extends State<HomePage> {
           title: Text("Neuste Angebote"),
         ),
         FutureBuilder(
-            future: model.getOffers(user: true, category: widget.title, name: widget.searchBody),
+            future: model.getOffers(user: false, category: widget.title, name: widget.searchBody),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Expanded(
