@@ -84,19 +84,20 @@ class Client {
     });
   }
 
-  Future getOffersFromServer(token, {String user, int categoryID, String name, String status}) async {
+  Future getOffersFromServer(token, {String owner, int categoryID, String name, String status}) async {
     String url = 'http://mobint-projekt.hci.uni-hannover.de/api/' + "articles/";
 
     Map<String, dynamic> header = new Map<String, dynamic>();
     header['Content-Type'] = 'application/json';
     header['Authorization'] = token.toString();
     String args = "?";
-    if (user != null) args += "owner=$user&";
+    if (owner != null) args += "owner=$owner&";
     if (name != null) args += "name=$name&";
     if (categoryID != null) args += "category=$categoryID&";
     if (status != null) args += "status=$status";
     url = url + args;
     print("httpClient: getOffersFromServer: Posting to $url");
+    print("httpClient: getOffersFromServer: header: " + header.toString());
     var response = await http.get(url + args, headers:
       {"Content-Type": "application/json",
       "Authorization": token.toString(),

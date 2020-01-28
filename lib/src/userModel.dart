@@ -141,8 +141,10 @@ class UserModel extends Model {
 
   logMeOut(BuildContext context) async {
     await storage.delete(key: 'token');
+    await storage.delete(key: 'username');
     loggedIn = false;
     notifyListeners();
+    showSnackbar(context, message: "Sie wurden erfolgreich abgemeldet.", color: Colors.green);
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 
@@ -185,7 +187,7 @@ class UserModel extends Model {
     if(category != null) _cat = categories[category + "_id"];
     print("USER MODEL: CATEGORY ID: " + _cat.toString());
 
-    if (user) offers = await client.getOffersFromServer(await this.getToken(), user: await this.getUsername(), name: name, categoryID: _cat, status: status);
+    if (user) offers = await client.getOffersFromServer(await this.getToken(), owner: await this.getUsername(), name: name, categoryID: _cat, status: status);
     else offers = await client.getOffersFromServer(this.getToken(), name: name, categoryID: _cat, status: status);
     if (offers.toString() == "[]") {
       List<int> none = [0];
