@@ -25,7 +25,7 @@ from flask_jwt import JWT, jwt_required, current_identity
 # to "JWT $the_jwt". Replace $the_jwt with the actual JWT. Mind the space between JWT and $the_jwt
 def authenticate(username, password):
     json = request.json
-    user = User.query.filter(User.username == json.get("username", "")).one_or_none()
+    user = User.query.filter(User.username == json.get("username", "").lower()).one_or_none()
     if user and argon2.verify(password, user.password):
         return user
     return None
