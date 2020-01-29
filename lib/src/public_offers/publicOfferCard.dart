@@ -1,3 +1,4 @@
+import 'package:Dorfinventar/src/messaging/_messageWriterPage.dart';
 import 'package:Dorfinventar/src/messaging/_messagesPage.dart';
 import 'package:Dorfinventar/src/public_offers/_offerPage.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,7 +71,7 @@ class PublicOfferCard extends Card {
                           onPressed: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) =>
-                                    MessagesPage(title: "Nachrichten",),));
+                                    MessagesWriterPage(loggedIn: true, username: "Hans",),));
                           },
                         )
                             :

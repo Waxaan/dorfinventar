@@ -17,13 +17,62 @@ class MessagesWriterPage extends StatefulWidget {
   MessagesWriterPage({Key key, this.username, this.loggedIn, this.id }) : super(key: key);
 
   @override
-  _MessagesWriterPage createState() => _MessagesWriterPage(username);
+  _MessagesWriterPage createState() => _MessagesWriterPage();
 }
 
 class _MessagesWriterPage extends State<MessagesWriterPage> {
-  List<MessageTile> items;
-  _MessagesWriterPage(String username) {
-    items = getItems(username);
+  List<MessageTile> items = <MessageTile>[];
+  final controllerMessage = TextEditingController();
+  final ScrollController _scrollController = new ScrollController();
+  int start_index = 0;
+
+  @override
+  void initState() {
+    var _message = "";
+    List<MessageTile> items = <MessageTile>[];
+    controllerMessage.text = _message;
+    super.initState();
+  }
+
+  _addMessageToChat(String message) {
+    setState(() {
+      items.add(MessageTile(
+        isuser: true,
+        content: message,)
+      );
+      _scrollController.animateTo(
+        0.0,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
+      Future.delayed(const Duration(milliseconds: 550), () {
+        setState(() {
+          items.add(_addResponseToChat(start_index));
+          start_index += 1;
+        });
+
+      });
+    });
+  }
+
+  _addResponseToChat(int index) {
+    List<MessageTile> items = <MessageTile>[];
+    items.addAll([
+      MessageTile(isuser: false,
+        content: "Ja klar, sehr gerne. Hast du denn auch nen Anhängerführerschein?",),
+      MessageTile(isuser: false, content: "Ok, dann soll ja alles klappen. Eine Frage noch: Bist du neu hier?",),
+      MessageTile(isuser: false, content: "Hast dir ne ruhige Gegend ausgesucht \nWo ziehst du denn hin?",),
+      MessageTile(isuser: false, content: "Ach da! Da wohnt auch Tante Inge. Kennst du doch, oder?",),
+      MessageTile(isuser: false, content: "Tante Inge! Die kennt man doch! Naja... kommst du dann hierher?",),
+      MessageTile(isuser: false, content: "Ok, dann steht ja alles.",),
+      MessageTile(isuser: false, content: "Bis später.",),
+      MessageTile(isuser: false, content: "Immer wieder gerne!",),
+    ]);
+    print(index.toString());
+    print(items.length.toString());
+    if (index >= items.length-1) return items[items.length-1];
+    return items[index];
+
   }
 
   @override
@@ -71,19 +120,26 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
                   }), */
               Expanded(
                 child: ListView.builder(
-                itemCount: items.length,
+                //controller: _scrollController,
+                reverse: true,
+                shrinkWrap: true,
+                controller: _scrollController,
+                itemCount: items != null? items.length:0 ,
                 itemBuilder: (context, index) {
-                  return items[index];
+                  return items[items.length-1 - index];
                 },
                 )
               ),
               Card(
                 child: ListTile(
-                  title: TextField(),
+                  title: TextField(
+                    controller: controllerMessage,
+                  ),
                   trailing: FlatButton(
                     onPressed: () async {
-                      //model.sendMessage();
-                      showSnackbar(context, message: "Nachricht gesendet");
+                      _addMessageToChat(controllerMessage.text);
+                      controllerMessage.text = "";
+                      //showSnackbar(context, message: "Nachricht gesendet");
                     },
                     child: Icon(Icons.send)
                   )
@@ -98,18 +154,5 @@ class _MessagesWriterPage extends State<MessagesWriterPage> {
 
   List<MessageTile> getItems(String username) {
     bool isuser = true;
-    List<MessageTile> items = <MessageTile>[];
-    items.addAll([
-      MessageTile(isuser: isuser,
-        content: "Ich würde gerne deinen Spachtel ausleihen",),
-      MessageTile(isuser: !isuser, content: "Ok, hast du noch irgendwelche Fragen?",),
-      MessageTile(isuser: isuser, content: "Ab wann kann ich den holen? Ist relativ dringend; "
-            "der Putz ist schon angemischt und wird gleich im Eimer wieder hart",),
-      MessageTile(isuser: !isuser, content: "Hmm. Wenns so dringend ist, kannst du gleich vorbei kommen",),
-      MessageTile(isuser: isuser, content: "Dann bis gleich",),
-      MessageTile(isuser: isuser, content: "Danke für den Spachtel",),
-      MessageTile(isuser: !isuser, content: "Immer wieder gerne!",),
-    ]);
-    return items;
   }
 }

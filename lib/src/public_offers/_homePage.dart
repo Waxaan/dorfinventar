@@ -7,9 +7,8 @@ import 'publicOfferCard.dart';
 
 class HomePage extends StatefulWidget {
 
-  HomePage({Key key, this.title, this.loggedIn}) : super(key: key);
+  HomePage({Key key, this.title}) : super(key: key);
   final String title;
-  final bool loggedIn;
   int index = 0;
   String searchBody;
   Future<List<PublicOfferCard>> offers;
@@ -60,7 +59,7 @@ class _HomePage extends State<HomePage> {
                             );
                           }
                         return PublicOfferCard(
-                          loggedIn: widget.loggedIn,
+                          loggedIn: model.loggedIn,
                           price: snapshot.data[index]['price'],
                           name: snapshot.data[index]['name'],
                           category: snapshot.data[index]['category_name'],

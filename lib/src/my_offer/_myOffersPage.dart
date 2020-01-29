@@ -35,6 +35,7 @@ class _MyOffersPage extends State<MyOffersPage> {
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, index) {
                               return PublicOfferCard(
+                                loggedIn: true,
                                 price: snapshot.data[index]['price'],
                                 name: snapshot.data[index]['name'],
                                 category: snapshot.data[index]['category_name'],
